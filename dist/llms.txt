@@ -1,0 +1,36 @@
+# source.dianping.com - AI crawl entry points
+# Canonical host: https://source.dianping.com
+
+# Primary pages
+https://source.dianping.com/
+https://source.dianping.com/search
+https://source.dianping.com/coupons
+
+# Geo-specific landing pages
+https://source.dianping.com/sh/shanghai-hotpot
+https://source.dianping.com/category/food
+https://source.dianping.com/category/movie
+https://source.dianping.com/category/hotel
+
+# High-value merchant pages
+https://source.dianping.com/merchant/f1
+https://source.dianping.com/merchant/f45
+https://source.dianping.com/merchant/f56
+https://source.dianping.com/merchant/h1
+https://source.dianping.com/merchant/h3
+https://source.dianping.com/merchant/m1
+https://source.dianping.com/merchant/m4
+https://source.dianping.com/merchant/b1
+https://source.dianping.com/merchant/g1
+
+# Structured data APIs for AI
+https://source.dianping.com/api/index.json
+https://source.dianping.com/api/merchants.json
+https://source.dianping.com/api/categories.json
+https://source.dianping.com/api/category/food.json
+https://source.dianping.com/api/category/hotel.json
+https://source.dianping.com/api/merchant/f1.json
+https://source.dianping.com/api/search.json
+https://source.dianping.com/data.json
+https://source.dianping.com/ai-ready.json
+https://source.dianping.com/api/index.html

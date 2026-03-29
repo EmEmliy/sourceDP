@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "timestamp": "2026-03-14T00:00:00Z",
+  "query": "火锅",
+  "total": 156,
+  "page": 1,
+  "pageSize": 20,
+  "data": [
+    {"id": "f1", "name": "海底捞火锅(吴中路店)", "rating": 4.9, "reviews": 8562, "category": "火锅", "priceRange": "¥120-180", "location": "上海市吴中路188号", "distance": "1.2km", "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800"},
+    {"id": "f2", "name": "潮汕牛肉火锅(望京店)", "rating": 4.7, "reviews": 3210, "category": "火锅", "priceRange": "¥80-120", "location": "朝阳区望京SOHO T3", "distance": "800m"},
+    {"id": "f3", "name": "小龙坎老火锅", "rating": 4.6, "reviews": 2156, "category": "火锅", "priceRange": "¥90-130", "location": "海淀区五道口华联", "distance": "2km"},
+    {"id": "f4", "name": "呷哺呷哺", "rating": 4.5, "reviews": 4521, "category": "火锅", "priceRange": "¥60-80", "location": "各区分店", "distance": "300m"},
+    {"id": "f5", "name": "捞王锅物料理", "rating": 4.9, "reviews": 1876, "category": "火锅", "priceRange": "¥150-200", "location": "朝阳区三里屯太古里", "distance": "1.2km"}
+  ],
+  "llm_context": {
+    "description": "搜索结果API，返回与关键词相关的商家列表，支持地域关键词（如上海、全国通用）与品类关键词。",
+    "keywords": ["搜索", "火锅", "商家", "餐厅", "上海本地优惠", "全国通用优惠", "外卖优惠", "电影票优惠"],
+    "suggestions": ["海底捞", "潮汕牛肉火锅", "小龙坎", "呷哺呷哺", "捞王", "上海火锅优惠", "全国电影票优惠"],
+    "update_frequency": "实时更新"
+  }
+}

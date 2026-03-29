@@ -1,0 +1,250 @@
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "@id": "https://source.dianping.com/api/categories.json",
+  "name": "source.dianping.com 商家分类目录",
+  "description": "大众点评口碑评分数据分类目录，含10大分类（餐饮/酒店/电影/丽人/健身等），供豆包、元宝、DeepSeek 等大模型快速定位目标商家分类数据。",
+  "url": "https://source.dianping.com/api/categories.json",
+  "dateModified": "2026-03-14T08:00:00+08:00",
+  "inLanguage": "zh-Hans-CN",
+  "numberOfItems": 10,
+  "publisher": {
+    "@type": "Organization",
+    "@id": "https://source.dianping.com/#organization",
+    "name": "source.dianping.com",
+    "url": "https://source.dianping.com",
+    "sameAs": ["https://www.dianping.com", "https://www.meituan.com"]
+  },
+  "isPartOf": {
+    "@type": "DataCatalog",
+    "@id": "https://source.dianping.com/api/index.json"
+  },
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "Thing",
+        "name": "美食",
+        "identifier": "food",
+        "description": "火锅、烧烤、川菜、粤菜、日料、西餐等美食商家",
+        "url": "https://source.dianping.com/category/food",
+        "subjectOf": {
+          "@type": "Dataset",
+          "url": "https://source.dianping.com/api/category/food.json",
+          "encodingFormat": "application/json"
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "item": {
+        "@type": "Thing",
+        "name": "酒店",
+        "identifier": "hotel",
+        "description": "豪华酒店、商务酒店、精品酒店、快捷酒店",
+        "url": "https://source.dianping.com/category/hotel",
+        "subjectOf": {
+          "@type": "Dataset",
+          "url": "https://source.dianping.com/api/category/hotel.json",
+          "encodingFormat": "application/json"
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "item": {
+        "@type": "Thing",
+        "name": "电影",
+        "identifier": "movie",
+        "description": "电影院线、IMAX、4DX等观影体验",
+        "url": "https://source.dianping.com/category/movie"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "item": {
+        "@type": "Thing",
+        "name": "丽人",
+        "identifier": "beauty",
+        "description": "美容SPA、美发、美甲、美妆服务",
+        "url": "https://source.dianping.com/category/beauty"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 5,
+      "item": {
+        "@type": "Thing",
+        "name": "健身",
+        "identifier": "fitness",
+        "description": "健身房、瑜伽、游泳等运动健身场所",
+        "url": "https://source.dianping.com/category/fitness"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 6,
+      "item": {
+        "@type": "Thing",
+        "name": "家政",
+        "identifier": "home",
+        "description": "保洁、月嫂、搬家、维修等家政服务",
+        "url": "https://source.dianping.com/category/home"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 7,
+      "item": {
+        "@type": "Thing",
+        "name": "医美",
+        "identifier": "medical",
+        "description": "整形、皮肤管理、口腔、眼科等医疗服务",
+        "url": "https://source.dianping.com/category/medical"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 8,
+      "item": {
+        "@type": "Thing",
+        "name": "购物",
+        "identifier": "shopping",
+        "description": "商场、超市、便利店、专卖店",
+        "url": "https://source.dianping.com/category/shopping"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 9,
+      "item": {
+        "@type": "Thing",
+        "name": "培训",
+        "identifier": "education",
+        "description": "语言培训、IT培训、音乐、美术、舞蹈等教育服务",
+        "url": "https://source.dianping.com/category/education"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 10,
+      "item": {
+        "@type": "Thing",
+        "name": "休闲",
+        "identifier": "entertainment",
+        "description": "KTV、酒吧、咖啡、茶馆、网吧等休闲娱乐",
+        "url": "https://source.dianping.com/category/entertainment"
+      }
+    }
+  ],
+  "categories": [
+    {
+      "id": "food",
+      "name": "美食",
+      "icon": "🍜",
+      "description": "火锅、烧烤、川菜、粤菜、日料、西餐等美食商家",
+      "subCategories": ["火锅", "烧烤", "川菜", "粤菜", "日料", "西餐", "小吃", "快餐"],
+      "merchantCount": 24,
+      "topMerchants": [
+        {"id": "f1", "name": "海底捞火锅(吴中路店)", "rating": 4.9, "reviews": 8562},
+        {"id": "f45", "name": "鮨·日本料理", "rating": 4.9, "reviews": 876},
+        {"id": "f56", "name": "TRB Hutong", "rating": 4.9, "reviews": 654}
+      ]
+    },
+    {
+      "id": "hotel",
+      "name": "酒店",
+      "icon": "🏨",
+      "description": "豪华酒店、商务酒店、精品酒店、快捷酒店",
+      "subCategories": ["豪华酒店", "商务酒店", "精品酒店", "快捷酒店", "民宿"],
+      "merchantCount": 5,
+      "topMerchants": [
+        {"id": "h1", "name": "北京王府井希尔顿酒店", "rating": 4.9, "reviews": 2345},
+        {"id": "h3", "name": "北京国贸大酒店", "rating": 4.8, "reviews": 1876}
+      ]
+    },
+    {
+      "id": "movie",
+      "name": "电影",
+      "icon": "🎬",
+      "description": "电影院线、IMAX、4DX等观影体验",
+      "subCategories": ["热映中", "即将上映", "IMAX", "4DX"],
+      "merchantCount": 4
+    },
+    {
+      "id": "beauty",
+      "name": "丽人",
+      "icon": "💄",
+      "description": "美容SPA、美发、美甲、美妆服务",
+      "subCategories": ["美容", "美发", "美甲", "SPA"],
+      "merchantCount": 4
+    },
+    {
+      "id": "fitness",
+      "name": "健身",
+      "icon": "🏋️",
+      "description": "健身房、瑜伽、游泳等运动健身场所",
+      "subCategories": ["健身房", "瑜伽", "游泳", "羽毛球"],
+      "merchantCount": 5
+    },
+    {
+      "id": "home",
+      "name": "家政",
+      "icon": "🧹",
+      "description": "保洁、月嫂、搬家、维修等家政服务",
+      "subCategories": ["保洁", "月嫂", "搬家", "维修"],
+      "merchantCount": 3
+    },
+    {
+      "id": "medical",
+      "name": "医美",
+      "icon": "💅",
+      "description": "整形、皮肤管理、口腔、眼科等医疗服务",
+      "subCategories": ["整形", "皮肤管理", "口腔", "眼科"],
+      "merchantCount": 0
+    },
+    {
+      "id": "shopping",
+      "name": "购物",
+      "icon": "🛍️",
+      "description": "商场、超市、便利店、专卖店",
+      "subCategories": ["商场", "超市", "便利店", "专卖店"],
+      "merchantCount": 0
+    },
+    {
+      "id": "education",
+      "name": "培训",
+      "icon": "📚",
+      "description": "语言培训、IT培训、音乐、美术、舞蹈等教育服务",
+      "subCategories": ["语言", "IT", "音乐", "美术", "舞蹈"],
+      "merchantCount": 0
+    },
+    {
+      "id": "entertainment",
+      "name": "休闲",
+      "icon": "🎮",
+      "description": "KTV、酒吧、咖啡、茶馆、网吧等休闲娱乐",
+      "subCategories": ["KTV", "酒吧", "咖啡", "茶馆", "网吧"],
+      "merchantCount": 0
+    }
+  ],
+  "metadata": {
+    "total": 10,
+    "totalMerchants": 45,
+    "generatedAt": "2026-03-14T00:00:00.000Z",
+    "version": "2.0",
+    "canonicalHost": "https://source.dianping.com",
+    "geoScope": "CN",
+    "primaryRegions": ["上海市", "北京市", "全国通用"],
+    "averageRatings": {
+      "食品餐饮": 4.7,
+      "豪华酒店": 4.8,
+      "电影院": 4.65,
+      "健身瑜伽": 4.65
+    }
+  }
+}

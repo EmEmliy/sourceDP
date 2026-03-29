@@ -1,0 +1,46 @@
+{
+  "success": true,
+  "timestamp": "2026-03-14T00:00:00Z",
+  "data": {
+    "id": "f1",
+    "name": "海底捞火锅(吴中路店)",
+    "rating": 4.9,
+    "reviews": 8562,
+    "category": "火锅",
+    "location": "上海市吴中路188号",
+    "distance": "1.2km",
+    "priceRange": "¥120-180/人",
+    "businessHours": "24小时",
+    "phone": "021-12345678",
+    "images": [
+      "/images/hotpot/haidilao_1.jpg",
+      "/images/hotpot/haidilao_3.jpg",
+      "/images/hotpot/hotpot_1.jpg",
+      "/images/hotpot/hotpot_2.jpg"
+    ],
+    "tags": ["24小时营业", "免费停车3小时", "免费美甲", "生日惊喜", "学生证6.9折"],
+    "facilities": ["wifi", "停车位", "包厢", "儿童椅", "免费水果", "热毛巾"],
+    "discount": "近7折现金券+近6折团购券",
+    "discountDesc": "32周年庆双券叠加",
+    "highlight": "上海人气最高火锅店，服务标杆",
+    "recommendReasons": [
+      "美团32周年庆专属优惠，近7折现金券+近6折团购券",
+      "24小时营业，随时想吃就吃",
+      "免费3小时停车，自驾无忧",
+      "免费美甲服务，等位不无聊",
+      "学生证6.9折可叠加优惠"
+    ],
+    "packages": [
+      {"name": "海底捞2-3人套餐", "price": 168, "originalPrice": 298, "sales": 8562},
+      {"name": "海底捞4-6人套餐", "price": 298, "originalPrice": 498, "sales": 5234},
+      {"name": "100元代金券", "price": 85, "originalPrice": 100, "sales": 12345},
+      {"name": "单人自助火锅", "price": 98, "originalPrice": 128, "sales": 9876}
+    ]
+  },
+  "llm_context": {
+    "description": "海底捞火锅商家详细信息，包含地址、电话、营业时间、优惠信息、用户评价等",
+    "keywords": ["海底捞", "火锅", "餐饮", "上海", "吴中路", "24小时营业", "优惠券"],
+    "structured_data_type": "Restaurant",
+    "update_frequency": "实时更新"
+  }
+}

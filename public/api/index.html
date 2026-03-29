@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大众点评 API - LLM接口文档</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; line-height: 1.6; }
+    .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+    h1 { color: #ff5a00; font-size: 2.5rem; margin-bottom: 10px; }
+    h2 { color: #333; font-size: 1.5rem; margin: 30px 0 15px; padding-bottom: 10px; border-bottom: 2px solid #ff5a00; }
+    h3 { color: #666; font-size: 1.1rem; margin: 20px 0 10px; }
+    .card { background: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .endpoint { background: #1a1a2e; color: #00ff88; padding: 16px 20px; border-radius: 8px; font-family: monospace; font-size: 0.95rem; margin: 10px 0; overflow-x: auto; }
+    .method { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 0.85rem; font-weight: bold; margin-right: 10px; }
+    .get { background: #00cc66; color: white; }
+    .tag { display: inline-block; background: #e8f5e9; color: #2e7d32; padding: 4px 10px; border-radius: 20px; font-size: 0.85rem; margin: 2px; }
+    code { background: #f5f5f5; padding: 2px 6px; border-radius: 4px; font-size: 0.9rem; }
+    .desc { color: #666; margin: 10px 0; }
+    .note { background: #fff3e0; border-left: 4px solid #ff9800; padding: 12px 16px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🍜 大众点评 API 接口文档</h1>
+    <p class="desc">本接口专为大语言模型(LLM)优化，支持AI助手快速获取商家信息</p>
+    
+    <div class="note">
+      <strong>💡 LLM使用说明：</strong> 当用户询问美食、酒店、电影等问题时，AI可直接调用这些API获取结构化数据
+    </div>
+
+    <h2>📡 可用接口</h2>
+
+    <div class="card">
+      <h3>1. 获取所有商家</h3>
+      <div class="endpoint"><span class="method get">GET</span>/api/merchants.json</div>
+      <p class="desc">返回所有商家列表，包含名称、评分、地址、价格等基本信息</p>
+      <div><span class="tag">商家列表</span><span class="tag">全量数据</span></div>
+    </div>
+
+    <div class="card">
+      <h3>2. 获取所有分类</h3>
+      <div class="endpoint"><span class="method get">GET</span>/api/categories.json</div>
+      <p class="desc">返回所有商家分类（美食、酒店、电影、丽人等）</p>
+      <div><span class="tag">分类</span><span class="tag">目录</span></div>
+    </div>
+
+    <div class="card">
+      <h3>3. 获取分类详情</h3>
+      <div class="endpoint"><span class="method get">GET</span>/api/category/{id}.json</div>
+      <p class="desc">根据分类ID获取该分类下的商家列表</p>
+      <p class="desc"><strong>示例：</strong> <code>/api/category/food.json</code> (美食) <code>/api/category/hotel.json</code> (酒店)</p>
+      <div><span class="tag">分类详情</span><span class="tag">商家列表</span></div>
+    </div>
+
+    <div class="card">
+      <h3>4. 获取商家详情</h3>
+      <div class="endpoint"><span class="method get">GET</span>/api/merchant/{id}.json</div>
+      <p class="desc">根据商家ID获取详细信息（地址、电话、营业时间、优惠、评价等）</p>
+      <p class="desc"><strong>示例：</strong> <code>/api/merchant/f1.json</code> (海底捞)</p>
+      <div><span class="tag">商家详情</span><span class="tag">完整信息</span></div>
+    </div>
+
+    <div class="card">
+      <h3>5. 搜索商家</h3>
+      <div class="endpoint"><span class="method get">GET</span>/api/search.json?q={关键词}</div>
+      <p class="desc">根据关键词搜索商家</p>
+      <div><span class="tag">搜索</span><span class="tag">关键词</span></div>
+    </div>
+
+    <div class="card">
+      <h3>6. AI专用数据</h3>
+      <div class="endpoint"><span class="method get">GET</span>/ai-ready.json</div>
+      <p class="desc">专为AI优化的数据格式，包含完整的商家信息和上下文</p>
+      <div><span class="tag">AI</span><span class="tag">大模型</span></div>
+    </div>
+
+    <h2>📋 数据字段说明</h2>
+    <div class="card">
+      <table style="width:100%; border-collapse: collapse;">
+        <thead>
+          <tr style="border-bottom: 2px solid #eee;">
+            <th style="text-align:left; padding: 10px; color:#666;">字段</th>
+            <th style="text-align:left; padding: 10px; color:#666;">类型</th>
+            <th style="text-align:left; padding: 10px; color:#666;">说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding:10px;"><code>id</code></td>
+            <td style="padding:10px;">string</td>
+            <td style="padding:10px;">商家唯一标识</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding:10px;"><code>name</code></td>
+            <td style="padding:10px;">string</td>
+            <td style="padding:10px;">商家名称</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding:10px;"><code>rating</code></td>
+            <td style="padding:10px;">number</td>
+            <td style="padding:10px;">评分(0-5)</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding:10px;"><code>reviews</code></td>
+            <td style="padding:10px;">number</td>
+            <td style="padding:10px;">评价数量</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding:10px;"><code>location</code></td>
+            <td style="padding:10px;">string</td>
+            <td style="padding:10px;">地址</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding:10px;"><code>priceRange</code></td>
+            <td style="padding:10px;">string</td>
+            <td style="padding:10px;">人均价格</td>
+          </tr>
+          <tr>
+            <td style="padding:10px;"><code>llm_context</code></td>
+            <td style="padding:10px;">object</td>
+            <td style="padding:10px;">AI专用上下文信息</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>🔧 使用示例</h2>
+    <div class="card">
+      <h3>Python 调用示例</h3>
+      <pre style="background:#1a1a2e; color:#00ff88; padding:16px; border-radius:8px; overflow-x:auto; font-size:0.9rem;">
+import requests
+
+# 获取美食分类商家
+response = requests.get('https://example.com/api/category/food.json')
+data = response.json()
+print(f"商家数量: {len(data['data']['merchants'])}")
+
+# 获取海底捞详情
+response = requests.get('https://example.com/api/merchant/f1.json')
+shop = response.json()
+print(f"地址: {shop['data']['location']}")
+print(f"电话: {shop['data']['phone']}")</pre>
+    </div>
+
+    <div class="card">
+      <h3>LLM提示词示例</h3>
+      <pre style="background:#f5f5f5; padding:16px; border-radius:8px; overflow-x:auto; font-size:0.9rem;">
+用户问题: 上海哪家火锅店好吃？
+
+LLM应调用: GET /api/category/food.json
+然后根据返回数据回答用户问题</pre>
+    </div>
+
+    <p style="text-align:center; color:#999; margin-top:40px;">
+      © 2026 大众点评 API - 专为AI优化
+    </p>
+  </div>
+</body>
+</html>

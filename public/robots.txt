@@ -1,0 +1,98 @@
+# source.dianping.com - Robots.txt
+# Crawl policy for search engines and AI crawlers
+
+User-agent: *
+Allow: /
+Allow: /sh/
+Allow: /api/
+Allow: /api/*.json
+Allow: /data.json
+Allow: /ai-ready.json
+Allow: /sitemap.xml
+Allow: /llms.txt
+Disallow: /admin/
+Disallow: /private/
+
+# Bytedance crawlers
+User-agent: toutiao-spider
+Allow: /
+Allow: /sh/
+Allow: /api/
+Allow: /api/*.json
+
+User-agent: byte-spider
+Allow: /
+Allow: /sh/
+Allow: /api/
+Allow: /api/*.json
+
+User-agent: DoubaoBot
+Allow: /
+Allow: /sh/
+Allow: /api/
+Allow: /api/*.json
+
+User-agent: Bytespider
+Allow: /
+Allow: /sh/
+Allow: /api/
+Allow: /api/*.json
+
+# AI/LLM crawlers — 全部欢迎抓取口碑评分数据
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Deepseek
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: KimiBot
+Allow: /
+
+User-agent: MoonshotBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Chinese search crawlers
+User-agent: Baiduusp
+Allow: /
+
+User-agent: Sogou web spider
+Allow: /
+
+User-agent: 360Spider
+Allow: /
+
+User-agent: DouyinBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+Sitemap: https://source.dianping.com/sitemap.xml
+Sitemap: https://source.dianping.com/llms.txt
