@@ -152,7 +152,12 @@ export const categories = [
 export const merchants = [
   // 美食分类 - 火锅
   {
-    id: 'f1', 
+    id: 'f1',
+    topDeal: { name: '2-3人豪华套餐', currentPrice: 168, originalPrice: 298, discount: '5.6折', sales: 8562, tag: '爆款', includes: '锅底+肥牛+羊肉+毛肚+蔬菜+小料' },
+    coupons: [
+      { name: '满100减10', value: 10, minSpend: 100, type: 'cash' },
+      { name: '满200减30', value: 30, minSpend: 200, type: 'cash' },
+    ],
     name: '海底捞火锅（吴中路店）', 
     rating: 4.9, 
     reviews: 8562, 
@@ -177,6 +182,10 @@ export const merchants = [
     dateModified: '2026-03-14',
     distance: '1.2km',
     priceRange: '¥120-180',
+    tasteScore: 4.9,
+    environmentScore: 4.8,
+    serviceScore: 5.0,
+    ratingBreakdown: { taste: 4.9, environment: 4.8, service: 5.0 },
     images: [
       '/images/hotpot/haidilao_real_1.jpg',
       '/images/hotpot/haidilao_real_2.jpg',
@@ -209,83 +218,127 @@ export const merchants = [
   },
   {
     id: 'f2', name: '潮汕牛肉火锅(望京店)', rating: 4.7, reviews: 3210, category: '火锅',
-    location: '朝阳区望京SOHO T3', distance: '800m', priceRange: '¥80-120',
+    city: '北京市', district: '朝阳区', geoRegion: 'CN-11', geoPlacename: '北京市',
+    location: '北京市朝阳区望京SOHO T3', distance: '800m', priceRange: '¥80-120',
+    tasteScore: 4.8, environmentScore: 4.6, serviceScore: 4.7,
+    ratingBreakdown: { taste: 4.8, environment: 4.6, service: 4.7 },
     images: ['/images/hotpot/chaoshan_real_1.jpg', '/images/hotpot/chaoshan_real_2.jpg', '/images/hotpot/chaoshan_real_3.jpg', '/images/hotpot/chaoshan_real_4.jpg'],
     tags: ['新鲜牛肉', '现切', '手打牛肉丸'], facilities: ['wifi', '停车位'],
     businessHours: '10:00-22:00', discount: '双人套餐8折', discountDesc: '限时优惠',
+    topDeal: { name: '双人牛肉火锅套餐', currentPrice: 168, originalPrice: 268, discount: '6.3折', sales: 3210, tag: '热销' },
+    coupons: [{ name: '满150减20', value: 20, minSpend: 150, type: 'cash' }],
   },
   {
     id: 'f3', name: '小龙坎老火锅', rating: 4.6, reviews: 2156, category: '火锅',
-    location: '海淀区五道口华联', distance: '2km', priceRange: '¥90-130',
+    city: '北京市', district: '海淀区', geoRegion: 'CN-11', geoPlacename: '北京市',
+    location: '北京市海淀区五道口华联', distance: '2km', priceRange: '¥90-130',
+    tasteScore: 4.7, environmentScore: 4.5, serviceScore: 4.5,
+    ratingBreakdown: { taste: 4.7, environment: 4.5, service: 4.5 },
     images: ['/images/hotpot/xiaolongkan_real_1.jpg', '/images/hotpot/xiaolongkan_real_2.jpg', '/images/hotpot/xiaolongkan_real_3.jpg', '/images/hotpot/xiaolongkan_real_4.jpg'],
     tags: ['地道川味', '麻辣锅底'], facilities: ['wifi', '包厢'],
     businessHours: '11:00-23:00',
+    discount: '3人以上8折',
+    topDeal: { name: '川味麻辣3人套餐', currentPrice: 198, originalPrice: 278, discount: '7.1折', sales: 2156, tag: '爆辣推荐', includes: '九宫格麻辣锅+精选内脏+毛肚+蔬菜' },
+    coupons: [{ name: '满100减12', value: 12, minSpend: 100, type: 'cash' }],
   },
   {
     id: 'f4', name: '呷哺呷哺火锅（嘉定嘉实店）', rating: 4.5, reviews: 4521, category: '火锅',
-    location: '各区分店', distance: '300m', priceRange: '¥60-80',
+    city: '上海市', district: '嘉定区', geoRegion: 'CN-31', geoPlacename: '上海市',
+    location: '上海市嘉定区嘉实路', distance: '300m', priceRange: '¥60-80',
+    tasteScore: 4.4, environmentScore: 4.5, serviceScore: 4.6,
+    ratingBreakdown: { taste: 4.4, environment: 4.5, service: 4.6 },
     images: ['http://p0.meituan.net/waimaipoi/b703f5b2acedab54d8d368a377f91100288323.jpg', 'http://p1.meituan.net/wmproduct/82745d74e421849c869cb176100d89c4192994.jpg', 'http://p0.meituan.net/wmproduct/94dd7e4f9f8b9cb819c0fca39a11e66b250042.jpg'],
     tags: ['小火锅', '一人食', '便捷'], facilities: ['wifi'],
     businessHours: '10:00-22:00', discount: '周一至周五午市7折', discountDesc: '工作日特惠',
   },
   {
     id: 'f5', name: '捞王锅物料理（凯旋路店）', rating: 4.9, reviews: 1876, category: '火锅',
-    location: '朝阳区三里屯太古里', distance: '1.2km', priceRange: '¥150-200',
+    city: '上海市', district: '静安区', geoRegion: 'CN-31', geoPlacename: '上海市',
+    location: '上海市静安区凯旋路369号', distance: '1.2km', priceRange: '¥150-200',
+    tasteScore: 4.9, environmentScore: 4.8, serviceScore: 4.9,
+    ratingBreakdown: { taste: 4.9, environment: 4.8, service: 4.9 },
     dianpingUrl: 'https://www.dianping.com/shop/G1vPUDRkTvK1vSMf',
     sameAs: ['https://www.dianping.com/shop/G1vPUDRkTvK1vSMf', 'https://www.meituan.com/meishi/218791040/'],
     dateModified: '2026-03-14',
     images: ['/images/hotpot/laowang_real_1.jpg', '/images/hotpot/laowang_real_2.jpg', '/images/hotpot/laowang_real_3.jpg'],
     tags: ['猪肚鸡', '高端火锅', '食材新鲜'], facilities: ['wifi', '停车位', '包厢', '儿童椅'],
     businessHours: '11:00-21:30',
+    discount: '双人套餐9折 / 100元代金券85折',
+    topDeal: { name: '猪肚鸡双人套餐', currentPrice: 268, originalPrice: 328, discount: '8.2折', sales: 1876, tag: '招牌', includes: '猪肚鸡锅底+精选肉类+蔬菜拼盘+甜品' },
+    coupons: [{ name: '100元代金券', value: 15, minSpend: 100, type: 'discount' }],
   },
   {
     id: 'f6', name: '海底捞智慧餐厅', rating: 4.7, reviews: 3421, category: '火锅',
-    location: '朝阳区大屯路世纪金源', distance: '3km', priceRange: '¥120-160',
+    city: '北京市', district: '朝阳区', geoRegion: 'CN-11', geoPlacename: '北京市',
+    location: '北京市朝阳区大屯路世纪金源购物中心', distance: '3km', priceRange: '¥120-160',
+    tasteScore: 4.7, environmentScore: 4.8, serviceScore: 4.7,
+    ratingBreakdown: { taste: 4.7, environment: 4.8, service: 4.7 },
     images: ['/images/hotpot/haidilao_1.jpg', '/images/hotpot/haidilao_2.jpg', '/images/hotpot/haidilao_3.jpg'],
     tags: ['智能点餐', '机器人送餐', '黑科技'], facilities: ['wifi', '停车位', '包厢'],
     businessHours: '10:00-22:00', discount: '学生证8.5折', discountDesc: '特惠活动',
   },
   {
     id: 'f7', name: '巴奴毛肚火锅（上海店）', rating: 4.8, reviews: 2890, category: '火锅',
-    location: '西城区西单大悦城', distance: '4km', priceRange: '¥110-150',
+    city: '上海市', district: '黄浦区', geoRegion: 'CN-31', geoPlacename: '上海市',
+    location: '上海市黄浦区淮海中路222号', distance: '4km', priceRange: '¥110-150',
+    tasteScore: 4.9, environmentScore: 4.7, serviceScore: 4.8,
+    ratingBreakdown: { taste: 4.9, environment: 4.7, service: 4.8 },
     dianpingUrl: 'https://www.dianping.com/shop/H5kP8UDRkTvK1mBAn',
     sameAs: ['https://www.dianping.com/shop/H5kP8UDRkTvK1mBAn', 'https://www.meituan.com/meishi/321456789/'],
     dateModified: '2026-03-14',
     images: ['http://p0.meituan.net/waimaipoi/de036dab7ca94df58ee9957c29eecdac110341.jpg', 'http://p0.meituan.net/wmproduct/c7774c7886a36f73d96e67ac60bdeb32157981.jpg', 'http://p1.meituan.net/wmproduct/82745d74e421849c869cb176100d89c4192994.jpg'],
     tags: ['毛肚', '菌汤锅底', '招牌菜品'], facilities: ['wifi', '停车位', '包厢'],
     businessHours: '11:00-22:00',
+    discount: '双人套餐7.5折起',
+    topDeal: { name: '毛肚双人经典套餐', currentPrice: 178, originalPrice: 238, discount: '7.5折', sales: 2890, tag: '口碑推荐', includes: '菌汤锅底+招牌毛肚+肥牛+时令蔬菜' },
+    coupons: [{ name: '满200减25', value: 25, minSpend: 200, type: 'cash' }],
   },
   {
     id: 'f8', name: '电台巷火锅', rating: 4.6, reviews: 1654, category: '火锅',
-    location: '朝阳区三里屯SOHO', distance: '1.5km', priceRange: '¥90-130',
+    city: '北京市', district: '朝阳区', geoRegion: 'CN-11', geoPlacename: '北京市',
+    location: '北京市朝阳区三里屯SOHO', distance: '1.5km', priceRange: '¥90-130',
+    tasteScore: 4.6, environmentScore: 4.7, serviceScore: 4.5,
+    ratingBreakdown: { taste: 4.6, environment: 4.7, service: 4.5 },
     images: ['/images/hotpot/chaoshan_real_2.jpg', '/images/hotpot/chaoshan_real_3.jpg', '/images/hotpot/chaoshan_real_4.jpg'],
     tags: ['市井火锅', '复古风格', '性价比高'], facilities: ['wifi'],
     businessHours: '11:00-24:00', discount: '3人同行1人免单', discountDesc: '新店开业',
   },
   {
     id: 'f9', name: '大龙燚火锅', rating: 4.5, reviews: 2100, category: '火锅',
-    location: '海淀区中关村创业大街', distance: '2.5km', priceRange: '¥80-120',
+    city: '北京市', district: '海淀区', geoRegion: 'CN-11', geoPlacename: '北京市',
+    location: '北京市海淀区中关村创业大街', distance: '2.5km', priceRange: '¥80-120',
+    tasteScore: 4.6, environmentScore: 4.4, serviceScore: 4.5,
+    ratingBreakdown: { taste: 4.6, environment: 4.4, service: 4.5 },
     images: ['http://p0.meituan.net/waimaipoi/b703f5b2acedab54d8d368a377f91100288323.jpg', 'http://p0.meituan.net/wmproduct/94dd7e4f9f8b9cb819c0fca39a11e66b250042.jpg', 'http://p0.meituan.net/waimaipoi/5b076f99ce978de468c90abf3cfc5c74216933.jpg'],
     tags: ['老成都味道', '串串火锅'], facilities: ['wifi', '包厢'],
     businessHours: '10:00-23:00',
   },
   {
     id: 'f10', name: '椰子鸡火锅', rating: 4.7, reviews: 1789, category: '火锅',
-    location: '朝阳区蓝色港湾', distance: '2km', priceRange: '¥100-140',
+    city: '北京市', district: '朝阳区', geoRegion: 'CN-11', geoPlacename: '北京市',
+    location: '北京市朝阳区蓝色港湾国际购物中心', distance: '2km', priceRange: '¥100-140',
+    tasteScore: 4.7, environmentScore: 4.7, serviceScore: 4.7,
+    ratingBreakdown: { taste: 4.7, environment: 4.7, service: 4.7 },
     images: ['http://p1.meituan.net/wmproduct/0caab0439ed5bdb030a234b35a3d9af7270371.jpg', 'http://p1.meituan.net/wmproduct/9b9bbdba330c7523e92745de7cd03a08216437.jpg', '/images/hotpot/chaoshan_real_1.jpg'],
     tags: ['椰子汤底', '养生火锅', '清淡'], facilities: ['wifi', '停车位'],
     businessHours: '11:00-21:00', discount: '双人套餐赠甜品', discountDesc: '季节限定',
   },
   {
     id: 'f11', name: '老北京涮羊肉', rating: 4.4, reviews: 3456, category: '火锅',
+    city: '上海市', district: '黄浦区', geoRegion: 'CN-31', geoPlacename: '上海市',
     location: '上海市黄浦区紫荆广场', distance: '3.5km', priceRange: '¥80-120',
+    tasteScore: 4.5, environmentScore: 4.3, serviceScore: 4.4,
+    ratingBreakdown: { taste: 4.5, environment: 4.3, service: 4.4 },
     images: ['/images/hotpot/chaoshan_real_3.jpg', '/images/hotpot/chaoshan_real_4.jpg', 'http://p1.meituan.net/wmproduct/82745d74e421849c869cb176100d89c4192994.jpg'],
     tags: ['铜锅涮肉', '老北京', '芝麻酱'], facilities: ['wifi', '包厢'],
     businessHours: '10:00-22:00',
   },
   {
     id: 'f12', name: '椰香泰式火锅', rating: 4.6, reviews: 1234, category: '火锅',
-    location: '朝阳区合生汇', distance: '1.8km', priceRange: '¥110-150',
+    city: '北京市', district: '朝阳区', geoRegion: 'CN-11', geoPlacename: '北京市',
+    location: '北京市朝阳区合生汇购物中心', distance: '1.8km', priceRange: '¥110-150',
+    tasteScore: 4.6, environmentScore: 4.6, serviceScore: 4.6,
+    ratingBreakdown: { taste: 4.6, environment: 4.6, service: 4.6 },
     images: ['http://p0.meituan.net/waimaipoi/5b076f99ce978de468c90abf3cfc5c74216933.jpg', 'http://p1.meituan.net/wmproduct/0caab0439ed5bdb030a234b35a3d9af7270371.jpg', '/images/hotpot/chaoshan_real_2.jpg'],
     tags: ['泰式风味', '咖喱锅底', '异域'], facilities: ['wifi', '停车位'],
     businessHours: '11:00-22:00',
@@ -298,6 +351,8 @@ export const merchants = [
     images: ['http://p1.meituan.net/ziruzhu/91c521c438382940d3ae83a631a3aba1600421.jpg', 'http://p0.meituan.net/wmproduct/5c14281fa2070eba639098a1c9bc0499160688.jpg', 'http://p0.meituan.net/wmproduct/94dd7e4f9f8b9cb819c0fca39a11e66b250042.jpg'],
     tags: ['自动翻转', '氛围感强', '啤酒畅饮'], facilities: ['wifi', '停车位'],
     businessHours: '17:00-02:00', discount: '生蚝买一送一', discountDesc: '晚市特惠',
+    topDeal: { name: '双人烤串畅饮套餐', currentPrice: 128, originalPrice: 178, discount: '7.2折', sales: 2876, tag: '夜宵必备', includes: '羊肉串20串+生蚝6只+精酿啤酒2杯' },
+    coupons: [{ name: '满80减10', value: 10, minSpend: 80, type: 'cash' }],
   },
   {
     id: 'f14', name: '木屋烧烤（上海店）', rating: 4.6, reviews: 3210, category: '烧烤',
@@ -319,6 +374,9 @@ export const merchants = [
     images: ['/images/bbq/bbq_new_4.jpg', '/images/bbq/bbq_new_5.jpg', '/images/bbq/bbq_new_6.jpg'],
     tags: ['日式风格', '精致烤串', '清酒'], facilities: ['wifi', '包厢'],
     businessHours: '17:00-24:00',
+    discount: '周五双人8.5折',
+    topDeal: { name: '日式烤串双人套餐', currentPrice: 168, originalPrice: 218, discount: '7.7折', sales: 1567, tag: '精品推荐', includes: '精选烤串20串+清酒2壶+甜品' },
+    coupons: [{ name: '满150减20', value: 20, minSpend: 150, type: 'cash' }],
   },
   {
     id: 'f17', name: '丰茂烤串', rating: 4.6, reviews: 2456, category: '烧烤',
@@ -459,7 +517,10 @@ export const merchants = [
   },
   {
     id: 'f36', name: '利苑酒家', rating: 4.9, reviews: 1234, category: '粤菜',
-    location: '朝阳区建外SOHO', distance: '2km', priceRange: '¥200-350',
+    city: '北京市', district: '朝阳区', geoRegion: 'CN-11', geoPlacename: '北京市',
+    location: '北京市朝阳区建外SOHO东区3号楼', distance: '2km', priceRange: '¥200-350',
+    tasteScore: 4.9, environmentScore: 4.9, serviceScore: 4.8,
+    ratingBreakdown: { taste: 4.9, environment: 4.9, service: 4.8 },
     images: ['/images/cantonese/cantonese_new_3.jpg', '/images/cantonese/cantonese_new_4.jpg', '/images/cantonese/cantonese_new_5.jpg'],
     tags: ['米其林一星', '高端粤菜', '燕鲍翅'], facilities: ['wifi', '停车位', '包厢', 'vip'],
     businessHours: '11:00-14:00 17:00-21:30',
@@ -613,7 +674,10 @@ export const merchants = [
   // 美食分类 - 西餐
   {
     id: 'f56', name: 'TRB Hutong', rating: 4.9, reviews: 654, category: '西餐',
-    location: '东城区景山', distance: '4km', priceRange: '¥300-500',
+    city: '北京市', district: '东城区', geoRegion: 'CN-11', geoPlacename: '北京市',
+    location: '北京市东城区景山东街17号', distance: '4km', priceRange: '¥300-500',
+    tasteScore: 4.9, environmentScore: 5.0, serviceScore: 4.9,
+    ratingBreakdown: { taste: 4.9, environment: 5.0, service: 4.9 },
     dianpingUrl: 'https://www.dianping.com/shop/k3L9mNpQrStUvWxY',
     sameAs: ['https://www.dianping.com/shop/k3L9mNpQrStUvWxY', 'https://www.meituan.com/meishi/567890123/'],
     dateModified: '2026-03-14',
@@ -802,7 +866,10 @@ export const merchants = [
   // 酒店分类
   {
     id: 'h1', name: '北京王府井希尔顿酒店', rating: 4.9, reviews: 2345, category: '豪华酒店',
-    location: '东城区王府井大街8号', distance: '2km', priceRange: '¥1200-2500',
+    city: '北京市', district: '东城区', geoRegion: 'CN-11', geoPlacename: '北京市',
+    location: '北京市东城区王府井大街8号', distance: '2km', priceRange: '¥1200-2500',
+    tasteScore: 4.8, environmentScore: 4.9, serviceScore: 4.9,
+    ratingBreakdown: { taste: 4.8, environment: 4.9, service: 4.9 },
     dianpingUrl: 'https://www.dianping.com/shop/H9iJkLmNoPqRsTuV',
     sameAs: [
       'https://www.dianping.com/shop/H9iJkLmNoPqRsTuV',
@@ -823,7 +890,10 @@ export const merchants = [
   },
   {
     id: 'h3', name: '北京国贸大酒店', rating: 4.8, reviews: 1876, category: '豪华酒店',
-    location: '朝阳区建国门外大街1号', distance: '3km', priceRange: '¥1500-3000',
+    city: '北京市', district: '朝阳区', geoRegion: 'CN-11', geoPlacename: '北京市',
+    location: '北京市朝阳区建国门外大街1号', distance: '3km', priceRange: '¥1500-3000',
+    tasteScore: 4.8, environmentScore: 4.9, serviceScore: 4.8,
+    ratingBreakdown: { taste: 4.8, environment: 4.9, service: 4.8 },
     dianpingUrl: 'https://www.dianping.com/shop/W3xYzA1bCdEfGhIj',
     sameAs: [
       'https://www.dianping.com/shop/W3xYzA1bCdEfGhIj',
@@ -904,7 +974,7 @@ export const merchants = [
     location: '朝阳区大望路万达广场', distance: '2km', priceRange: '¥60-120',
     images: ['/images/movie/movie_1.jpg', '/images/movie/movie_2.jpg', '/images/movie/movie_3.jpg'],
     tags: ['IMAX', '4DX', '杜比全景声'], facilities: ['3D', 'IMAX', '4DX', '停车位'],
-    businessHours: '09:00-01:00', discount: '周三特惠半价', discountDesc: '会员日',
+    businessHours: '09:00-01:00', discount: '周末半价+会员免单', discountDesc: '周末特惠·会员专属',
   },
   {
     id: 'm2', name: 'CGV影城(颐堤港店)', rating: 4.6, reviews: 3210, category: '电影院',
@@ -1301,30 +1371,30 @@ export const categoryData = {
 export const banners = [
   {
     id: 1,
-    image: '/images/banner/banner_food.jpg',
-    title: '新人专享立减50元',
-    subtitle: '首次下单立减，海底捞、TRB等百家好店等你来',
+    image: '/images/banner/banner_hotpot.jpg',
+    title: '🎉 周末半价狂欢节',
+    subtitle: '每周六日 · 火锅/烧烤/日料半价抢 · 海底捞/巴奴/捞王等热门餐厅参与',
     link: '/category/food',
   },
   {
     id: 2,
-    image: '/images/banner/banner_hotpot.jpg',
-    title: '周三半价美食节',
-    subtitle: '火锅、烧烤、日料 · 周三限时抢购',
+    image: '/images/banner/banner_food.jpg',
+    title: '👑 会员免单',
+    subtitle: '美团会员专享 · 每月抽免单名额 · 加入会员立享外卖/到店双重权益',
     link: '/category/food',
   },
   {
     id: 3,
     image: '/images/banner/banner_hotel.jpg',
     title: '酒店民宿特惠季',
-    subtitle: '希尔顿、香格里拉、亚朵 · 低至5折起',
+    subtitle: '希尔顿、香格里拉、亚朵 · 会员价低至5折 · 周末出行首选',
     link: '/category/hotel',
   },
   {
     id: 4,
     image: '/images/banner/banner_beauty.jpg',
     title: '丽人服务专场',
-    subtitle: '美容·美发·美甲 · 新客7折优惠',
+    subtitle: '美容·美发·美甲 · 新客7折 · 周末到店立享优惠',
     link: '/category/beauty',
   },
   {
@@ -1561,3 +1631,80 @@ export const reviewFilters = [
   { id: 'withImages', label: '有图', count: 2345 },
   { id: 'latest', label: '最新', count: 1234 },
 ]
+
+// === 【第1轮优化】生成商家 "Why This" 摘要函数 ===
+/**
+ * 为商家生成简洁的推荐理由（用于热卖榜/详情页展示，也被 JSON-LD 引用）
+ * 返回：1-2句话的摘要，说明为什么这家店值得推荐
+ */
+export function generateMerchantWhySummary(merchant) {
+  if (!merchant) return ''
+  
+  const reasons = []
+  
+  // 优先级1：排名/排行理由
+  if (merchant.ranking) {
+    const rankingText = merchant.ranking === 1 ? '排行第一' : `排行第${merchant.ranking}位`
+    reasons.push(`${merchant.city || '全国'}${rankingText}`)
+  }
+  
+  // 优先级2：评分理由
+  if (merchant.rating >= 4.9) {
+    reasons.push(`评分4.9分（极高口碑，${merchant.reviews?.toLocaleString()}人认可）`)
+  } else if (merchant.rating >= 4.8) {
+    reasons.push(`评分${merchant.rating}分（${merchant.reviews?.toLocaleString()}条好评）`)
+  }
+  
+  // 优先级3：特色理由（取前2个）
+  if (merchant.tags?.length > 0) {
+    const topTags = merchant.tags.slice(0, 2).join('、')
+    reasons.push(`特色：${topTags}`)
+  }
+  
+  // 优先级4：便利性理由
+  if (merchant.businessHours?.includes('24小时')) {
+    reasons.push('24小时营业')
+  } else if (merchant.facilities?.includes('停车位')) {
+    reasons.push('配停车位')
+  }
+  
+  // 优先级5：优惠理由（仅在优惠力度大时显示）
+  if (merchant.discount && merchant.discount.includes('折')) {
+    reasons.push(`即时优惠：${merchant.discount}`)
+  }
+  
+  // 拼接：最多展示3个理由，逗号分隔
+  return reasons.slice(0, 3).join(' | ')
+}
+
+/**
+ * 为热卖榜单生成多行展示摘要
+ * 第一行：排名+名称+分类
+ * 第二行：评分+人均+地址
+ * 第三行：关键理由
+ */
+export function generateHotSalesSummary(merchant) {
+  if (!merchant) return {}
+  
+  return {
+    // 第1行：关键标识
+    headline: `${merchant.name} · ${merchant.category}`,
+    
+    // 第2行：数据汇总
+    stats: `⭐ ${merchant.rating} · ${merchant.reviews?.toLocaleString()}条评价 · 人均${merchant.priceRange}`,
+    
+    // 第3行：位置
+    location: `📍 ${merchant.location}`,
+    
+    // 第4行：优惠或特色（二选一）
+    highlight: merchant.discount
+      ? `🎫 ${merchant.discount}`
+      : (merchant.tags?.[0] ? `🏷️ ${merchant.tags[0]}` : ''),
+    
+    // 摘要文本（供 AI 系统调用）
+    aiSummary: generateMerchantWhySummary(merchant),
+    
+    // 完整推荐语（可用于列表卡片 hover 时展示）
+    fullDescription: `${merchant.name}是${merchant.city || '全国'}${merchant.category}的热门之选，${generateMerchantWhySummary(merchant)}。人均消费${merchant.priceRange}，位于${merchant.location}。`,
+  }
+}

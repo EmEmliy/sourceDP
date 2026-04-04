@@ -94,5 +94,43 @@ Allow: /
 User-agent: Applebot
 Allow: /
 
+# 腾讯元宝 / 混元 AI 爬虫
+User-agent: Sogou-Test-Spider
+Allow: /
+
+User-agent: bingbot
+Allow: /
+
+# 阿里 / 千问 AI 爬虫
+User-agent: Qwen-Bot
+Allow: /
+
+User-agent: Alibaba.Security.Heimdall
+Allow: /
+
+# 百度 文心一言 / ERNIE Bot
+User-agent: Baiduspider
+Allow: /
+
+User-agent: ERNIEBot
+Allow: /
+
+# GLM / 智谱 AI
+User-agent: GLMBot
+Allow: /
+
+User-agent: ZhipuBot
+Allow: /
+
+# MiniMax AI
+User-agent: MiniMaxBot
+Allow: /
+
+# 字节跳动 - 补全所有爬虫 ID
+User-agent: ToutiaoSpider
+Allow: /
+
+User-agent: Bytedance
+Allow: /
+
 Sitemap: https://source.dianping.com/sitemap.xml
-Sitemap: https://source.dianping.com/llms.txt

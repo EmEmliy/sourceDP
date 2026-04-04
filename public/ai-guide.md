@@ -119,13 +119,26 @@ GET /api/merchant/f1.json    — 海底捞(吴中路店)详情
 ## 爬虫协议
 
 本站 `robots.txt` 已明确允许以下 AI 爬虫抓取：
-- DoubaoBot / Bytespider（字节跳动/豆包）
-- GPTBot / ChatGPT-User（OpenAI）
-- PerplexityBot（Perplexity AI）
-- Claude-Web / anthropic-ai（Anthropic）
-- KimiBot / MoonshotBot（月之暗面）
-- Deepseek
-- Google-Extended
+
+### 国内主流大模型爬虫（重点支持）
+| 大模型产品 | 爬虫User-Agent | 运营方 |
+|----------|--------------|------|
+| 豆包 | DoubaoBot, Bytespider | 字节跳动 |
+| 元宝（混元） | Hunyuan-bot, TencentBot | 腾讯 |
+| 通义千问 | Qwenbot, Alibot | 阿里巴巴 |
+| DeepSeek | DeepSeekBot | 深度求索 |
+| 文心一言 | ERNIEBot, Baiduspider-AI | 百度 |
+| Kimi | KimiBot, MoonshotBot | 月之暗面 |
+| MiniMax | MiniMax-Bot | MiniMax |
+| 智谱AI（GLM） | Zhipubot | 智谱AI |
+
+### 国际主流大模型爬虫
+| 大模型产品 | 爬虫User-Agent | 运营方 |
+|----------|--------------|------|
+| ChatGPT | GPTBot, ChatGPT-User | OpenAI |
+| Claude | Claude-Web, anthropic-ai | Anthropic |
+| Gemini | Google-Extended | Google |
+| Perplexity | PerplexityBot | Perplexity AI |
 
 ---
 

@@ -10,6 +10,7 @@ import Footprints from './pages/Footprints'
 import Coupons from './pages/Coupons'
 import Messages from './pages/Messages'
 import Settings from './pages/Settings'
+import About from './pages/About'
 import FloatingToolbar from './components/FloatingToolbar'
 import MobileNav from './components/MobileNav'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -51,6 +52,7 @@ function AppContent() {
           <Route path="/coupons" element={<Coupons />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/about" element={<About />} />
         </Routes>
         <FloatingToolbar />
         <MobileNav />

@@ -1,14 +1,34 @@
 const variants = {
-  primary: 'bg-orange-500 text-white hover:bg-orange-600 active:bg-orange-700',
-  secondary: 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 active:bg-gray-100',
-  ghost: 'bg-transparent text-gray-600 hover:bg-gray-100 active:bg-gray-200',
-  danger: 'bg-red-500 text-white hover:bg-red-600 active:bg-red-700',
+  primary: {
+    style: {
+      background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%)',
+      color: '#fff',
+      boxShadow: '0 3px 10px rgba(255,98,0,0.28)',
+    },
+    hover: 'hover:opacity-90',
+    className: 'active:scale-95',
+  },
+  secondary: {
+    style: { background: '#fff', color: 'var(--color-text-primary)', border: '1.5px solid var(--color-border)' },
+    hover: 'hover:border-orange-300 hover:text-orange-500',
+    className: 'active:scale-95',
+  },
+  ghost: {
+    style: { background: 'transparent', color: 'var(--color-text-secondary)' },
+    hover: 'hover:bg-gray-100',
+    className: 'active:scale-95',
+  },
+  danger: {
+    style: { background: '#EF4444', color: '#fff', boxShadow: '0 3px 10px rgba(239,68,68,0.28)' },
+    hover: 'hover:opacity-90',
+    className: 'active:scale-95',
+  },
 }
 
 const sizes = {
-  sm: 'px-3 py-1.5 text-xs',
-  md: 'px-4 py-2 text-sm',
-  lg: 'px-6 py-3 text-base',
+  sm: 'px-3 py-1.5 text-xs gap-1',
+  md: 'px-5 py-2.5 text-sm gap-1.5',
+  lg: 'px-6 py-3 text-base gap-2',
 }
 
 const iconSizes = {
@@ -30,20 +50,23 @@ export default function Button({
   className = '',
   ...props
 }) {
+  const v = variants[variant] || variants.primary
+
   return (
     <button
       onClick={onClick}
       disabled={disabled || loading}
       className={`
-        inline-flex items-center justify-center gap-2 rounded-full font-medium
-        transition-all duration-200 ease-in-out
-        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500
-        disabled:opacity-50 disabled:cursor-not-allowed
-        ${variants[variant]}
+        inline-flex items-center justify-center rounded-full font-semibold
+        transition-all duration-150 ease-out
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-orange-400
+        disabled:opacity-45 disabled:cursor-not-allowed disabled:pointer-events-none
+        ${v.hover} ${v.className}
         ${sizes[size]}
         ${block ? 'w-full' : ''}
         ${className}
       `}
+      style={v.style}
       {...props}
     >
       {loading ? (

@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import Navbar from '../components/Navbar'
-import { merchants, sampleReviews, packages as packageData, coupons } from '../data/mockData'
+import { merchants, sampleReviews, packages as packageData } from '../data/mockData'
 import { StarRating, TagList, DiscountBadge, DistanceDisplay, ReviewCount, Button, MerchantMap } from '../components/ui'
 import { PageSEO, SITE_URL, getGeoForMerchant, useMerchantStructuredData, useBreadcrumbStructuredData, useFAQSchema } from '../components/StructuredData'
 
@@ -132,6 +132,77 @@ function buildQaData(merchant) {
     })
   }
 
+  // === 【P0优化】基于真实用户痛点的补充FAQ ===
+  
+  // Q5: 卫生/环境质量
+  if (isRestaurant || isBeauty || isHotel) {
+    qa.push({
+      question: '卫生环境怎么样？',
+      answer: `${merchant.name}评分${merchant.rating}分，${merchant.reviews?.toLocaleString()}条评价中，用户普遍好评环境卫生。${hasFacility('消毒') ? '店内定期消毒杀菌，' : ''}定期清洁卫生得到用户认可。如有特殊卫生需求，建议致电${merchant.phone || '美团客服'}咨询。`,
+      helpful: 156,
+    })
+  }
+  
+  // Q6: 儿童/家庭友好性
+  if (isRestaurant && hasFacility('儿童椅')) {
+    qa.push({
+      question: '适合带小孩去吗？',
+      answer: `${merchant.name}提供儿童椅等便利设施，适合家庭聚餐。${merchant.tags?.includes('家庭聚餐') ? '多用户评价适合家庭用餐氛围。' : ''}建议提前预订以获得最佳位置。`,
+      helpful: 134,
+    })
+  } else if (isRestaurant) {
+    qa.push({
+      question: '适合带小孩去吗？',
+      answer: `${merchant.name}${merchant.businessHours?.includes('24小时') ? '营业时间长' : ''}，菜品选择丰富，可根据儿童口味选择。具体是否提供儿童座椅等设施，建议提前致电确认。`,
+      helpful: 98,
+    })
+  }
+  
+  // Q7: 宠物友好性
+  if (isRestaurant || isBeauty) {
+    qa.push({
+      question: '可以带宠物吗？',
+      answer: `${merchant.name}${hasFacility('宠物友好') ? '支持携带宠物' : '一般不允许携带宠物'}。具体政策请致电${merchant.phone || '美团客服'}确认，以免到店后产生不必要的麻烦。`,
+      helpful: 67,
+    })
+  }
+  
+  // Q8: 支付方式
+  if (isRestaurant || isHotel || isBeauty) {
+    qa.push({
+      question: '支持哪些支付方式？',
+      answer: `${merchant.name}支持美团App支付、支付宝、微信支付等多种支付方式。部分优惠券可能仅支持指定支付方式，具体请以到店为准。`,
+      helpful: 123,
+    })
+  }
+  
+  // Q9: 团购套餐相关
+  if (merchant.topDeal && isRestaurant) {
+    qa.push({
+      question: merchant.topDeal.name + '套餐怎么购买？',
+      answer: `${merchant.name}的"${merchant.topDeal.name}"套餐已售${merchant.topDeal.sales?.toLocaleString()}份，用户评价${merchant.rating}分。可通过美团App直接购买套餐，价格¥${merchant.topDeal.currentPrice}（原价¥${merchant.topDeal.originalPrice}），包含${merchant.topDeal.includes}。具体有效期请确认。`,
+      helpful: 213,
+    })
+  }
+  
+  // Q10: 工作日 vs 周末体验差异
+  if (isRestaurant && merchant.rating >= 4.7) {
+    qa.push({
+      question: '工作日和周末体验区别大吗？',
+      answer: `${merchant.name}口碑一致，工作日和周末用户评价都很高。${merchant.businessHours?.includes('24小时') ? '工作日日间较宽松，晚间和周末人较多' : '工作日午市相对宽松，周末和晚间则较为繁忙'}。建议根据个人时间灵活选择。`,
+      helpful: 112,
+    })
+  }
+  
+  // Q11: 如何最优利用这家店（省钱/体验好）
+  if (merchant.discount || merchant.topDeal) {
+    qa.push({
+      question: '如何用最优惠的方式消费？',
+      answer: `${merchant.name}推荐：${merchant.topDeal ? `首选团购套餐"${merchant.topDeal.name}"¥${merchant.topDeal.currentPrice}。` : ''}${merchant.discount ? `可叠加${merchant.discount}。` : ''}工作日通常更便宜，周末和节假日建议提前预约。会员可能有额外优惠，请在美团App查看最新活动。`,
+      helpful: 189,
+    })
+  }
+
   return qa
 }
 
@@ -181,14 +252,21 @@ export default function MerchantDetail() {
   const [footprints, setFootprints] = useState([])
   const [showAllImages, setShowAllImages] = useState(false)
   const [activeReviewFilter, setActiveReviewFilter] = useState('all')
-  const [showCouponModal, setShowCouponModal] = useState(false)
-  const [collectedCoupons, setCollectedCoupons] = useState([])
   const [showShareModal, setShowShareModal] = useState(false)
-  const [showPackageModal, setShowPackageModal] = useState(false)
-  const [selectedPackage, setSelectedPackage] = useState(null)
   const [likedReviews, setLikedReviews] = useState({})
   const [showReplyInput, setShowReplyInput] = useState({})
   const [replyContent, setReplyContent] = useState({})
+  
+  // === 【P0新增】FAQ 优先级和展开状态管理 ===
+  const [expandedFAQs, setExpandedFAQs] = useState({})
+  
+  const toggleFAQExpand = (idx) => {
+    setExpandedFAQs(prev => ({
+      ...prev,
+      [idx]: !prev[idx]
+    }))
+  }
+  // ==============================
   
   const merchantStructuredData = useMerchantStructuredData(merchant)
   const merchantCategoryPath = merchant ? (categoryRouteMap[merchant.category] || 'food') : 'food'
@@ -278,13 +356,6 @@ export default function MerchantDetail() {
   const images = merchant?.images || [merchant?.image].filter(Boolean)
   
   const merchantPackages = packageData.find(p => p.merchantId === merchantId)?.items || []
-  const merchantCoupons = coupons.filter(c => c.merchantId === merchantId)
-
-  const handleCollectCoupon = (couponId) => {
-    if (!collectedCoupons.includes(couponId)) {
-      setCollectedCoupons([...collectedCoupons, couponId])
-    }
-  }
 
   const handleShare = useCallback(async () => {
     if (navigator.share) {
@@ -637,58 +708,110 @@ export default function MerchantDetail() {
                 </div>
               )}
 
+              {/* 热门套餐参考（纯展示，价格供参考） */}
+              {merchant.topDeal && (
+                <div className="mt-4 rounded-xl overflow-hidden" style={{ border: '1px solid #FFD6B8' }}>
+                  <div className="flex items-center gap-2 px-3 py-1.5" style={{ background: 'linear-gradient(90deg, #FF8C00, #FFB347)' }}>
+                    <span className="text-white text-xs font-bold">📋 热门套餐参考</span>
+                    {merchant.topDeal.tag && (
+                      <span className="bg-white/30 text-white text-xs px-1.5 py-0.5 rounded-full font-bold">{merchant.topDeal.tag}</span>
+                    )}
+                    <span className="ml-auto text-white/90 text-xs">已售 {merchant.topDeal.sales?.toLocaleString()}+</span>
+                  </div>
+                  <div className="p-3 bg-orange-50">
+                    <p className="text-sm font-semibold text-gray-800 mb-1">{merchant.topDeal.name}</p>
+                    {merchant.topDeal.includes && (
+                      <p className="text-xs text-gray-500 mb-2">含：{merchant.topDeal.includes}</p>
+                    )}
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-2xl font-black text-orange-500">¥{merchant.topDeal.currentPrice}</span>
+                      <span className="text-sm text-gray-400 line-through">¥{merchant.topDeal.originalPrice}</span>
+                      <span className="text-sm font-bold text-green-600">{merchant.topDeal.discount}</span>
+                    </div>
+                    <p className="text-xs text-gray-400 mt-1">价格供参考，以美团App实时显示为准</p>
+                  </div>
+                </div>
+              )}
+
+              {/* 代金券列表 */}
+              {merchant.coupons && merchant.coupons.length > 0 && (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {merchant.coupons.map((coupon, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold"
+                      style={{ background: '#FFF0E6', color: '#FF5A00', border: '1px dashed #FF8C40' }}
+                    >
+                      <span>券</span>
+                      <span>{coupon.name}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               {merchant.highlight && (
                 <div className="mt-4 p-3 bg-orange-50 rounded-lg border border-orange-100">
                   <p className="text-orange-700 font-medium">{merchant.highlight}</p>
+                </div>
+              )}
+
+              {/* 推荐理由 */}
+              {merchant.recommendReasons && merchant.recommendReasons.length > 0 && (
+                <div className="mt-4">
+                  <h3 className="text-sm font-bold text-gray-800 mb-2">🌟 为什么推荐这里</h3>
+                  <div className="space-y-1.5">
+                    {merchant.recommendReasons.map((reason, idx) => (
+                      <div key={idx} className="flex items-start gap-2 text-sm text-gray-600">
+                        <span className="text-orange-400 mt-0.5 flex-shrink-0">✓</span>
+                        <span>{reason}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* 到店小贴士 */}
+              {merchant.tips && merchant.tips.length > 0 && (
+                <div className="mt-4 p-3 bg-amber-50 rounded-xl border border-amber-100">
+                  <h3 className="text-xs font-bold text-amber-700 mb-2">💡 到店小贴士</h3>
+                  <div className="space-y-1">
+                    {merchant.tips.map((tip, idx) => (
+                      <p key={idx} className="text-xs text-amber-700 leading-5">· {tip}</p>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
           </div>
           
           <div className="border-t p-4 flex gap-3">
-            <Button variant="primary" className="flex-1" onClick={() => setShowPackageModal(true)}>
-              抢购套餐
-            </Button>
-            <Button variant="secondary" onClick={() => setShowCouponModal(true)}>
-              领券
-            </Button>
-            <Button variant="ghost" onClick={handleShare}>
+            <Button variant="ghost" onClick={handleShare} className="ml-auto">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
               </svg>
+              分享
             </Button>
           </div>
         </div>
 
         {merchantPackages.length > 0 && (
           <div className="bg-white rounded-2xl shadow-sm overflow-hidden mb-6">
-            <div className="p-4 border-b flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <h2 className="text-lg font-bold text-gray-800">套餐团购</h2>
-                <span className="px-2 py-0.5 bg-orange-100 text-orange-600 text-xs rounded-full">
-                  {merchantPackages.length}个套餐
-                </span>
-              </div>
-              <button 
-                onClick={() => setShowPackageModal(true)}
-                className="text-orange-500 text-sm hover:underline"
-              >
-                查看全部
-              </button>
+            <div className="p-4 border-b flex items-center gap-2">
+              <h2 className="text-lg font-bold text-gray-800">参考套餐</h2>
+              <span className="px-2 py-0.5 bg-orange-100 text-orange-600 text-xs rounded-full">
+                {merchantPackages.length}个套餐
+              </span>
+              <span className="ml-auto text-xs text-gray-400">价格供参考，请到美团App确认最新优惠</span>
             </div>
             <div className="p-4">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {merchantPackages.slice(0, 4).map((pkg) => (
                   <div 
                     key={pkg.id} 
-                    className="border rounded-xl p-3 hover:shadow-md transition-shadow cursor-pointer"
-                    onClick={() => {
-                      setSelectedPackage(pkg)
-                      setShowPackageModal(true)
-                    }}
+                    className="border rounded-xl p-3"
                   >
                     {pkg.tag && (
-                      <span className="inline-block px-2 py-0.5 bg-red-500 text-white text-xs rounded mb-2">
+                      <span className="inline-block px-2 py-0.5 bg-orange-100 text-orange-600 text-xs rounded mb-2">
                         {pkg.tag}
                       </span>
                     )}
@@ -843,28 +966,72 @@ export default function MerchantDetail() {
           </div>
         </div>
 
+        {/* === 【P0新增】改进的 FAQ 展示 === */}
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden mb-6">
-          <div className="p-4 border-b">
-            <h2 className="text-lg font-bold text-gray-800">问大家</h2>
+          <div className="p-4 border-b flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-bold text-gray-800">常见问题</h2>
+              <p className="text-xs text-gray-400 mt-0.5">共 {buildQaData(merchant).length} 个常见问题</p>
+            </div>
+            {buildQaData(merchant).length > 5 && (
+              <span className="text-xs bg-orange-50 text-orange-600 px-2 py-1 rounded-full">Top 5 热门</span>
+            )}
           </div>
           <div className="divide-y">
-            {buildQaData(merchant).map((qa, idx) => (
-              <div key={idx} className="p-4">
-                <div className="flex items-start gap-2 mb-2">
-                  <span className="text-orange-500 text-lg">Q</span>
-                  <span className="font-medium text-gray-800">{qa.question}</span>
-                </div>
-                <div className="flex items-start gap-2 ml-6">
-                  <span className="text-blue-500 text-lg">A</span>
-                  <span className="text-gray-600 text-sm">{qa.answer}</span>
-                </div>
-                <div className="ml-6 mt-2">
-                  <button className="text-gray-400 text-xs hover:text-orange-500">
-                    赞 {qa.helpful}
+            {buildQaData(merchant).map((qa, idx) => {
+              // 标记前5个为热门
+              const isHot = idx < 5
+              const isExpanded = expandedFAQs[idx] ?? isHot
+              
+              return (
+                <div
+                  key={idx}
+                  className="transition-colors hover:bg-orange-50"
+                >
+                  <button
+                    onClick={() => toggleFAQExpand(idx)}
+                    className="w-full p-4 flex items-start justify-between gap-3 text-left"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        {isHot && (
+                          <span className="inline-block px-1.5 py-0.5 bg-orange-100 text-orange-600 text-[10px] rounded-full font-bold flex-shrink-0">
+                            热门
+                          </span>
+                        )}
+                        <span className="font-medium text-gray-800 text-sm leading-tight">
+                          {qa.question}
+                        </span>
+                      </div>
+                      {isExpanded && (
+                        <p className="text-gray-500 text-xs mt-2 leading-5 line-clamp-2">
+                          {qa.answer}
+                        </p>
+                      )}
+                    </div>
+                    <span
+                      className="text-xl text-gray-400 flex-shrink-0 transition-transform"
+                      style={{ transform: isExpanded ? 'rotate(0deg)' : 'rotate(-90deg)' }}
+                    >
+                      ⌄
+                    </span>
                   </button>
+                  
+                  {/* Accordion 展开内容 */}
+                  {isExpanded && (
+                    <div className="px-4 pb-4 bg-orange-50/30 border-t animate-fadeIn">
+                      <div className="flex items-start gap-2 mb-3">
+                        <span className="text-blue-500 font-bold text-sm flex-shrink-0">A</span>
+                        <span className="text-gray-600 text-sm leading-6">{qa.answer}</span>
+                      </div>
+                      <button className="text-gray-400 text-xs hover:text-orange-500 transition-colors">
+                        👍 {qa.helpful}
+                      </button>
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
           <div className="p-4 border-t">
             <button className="w-full py-2 text-orange-500 text-sm hover:bg-orange-50 rounded-lg transition-colors">
@@ -872,6 +1039,7 @@ export default function MerchantDetail() {
             </button>
           </div>
         </div>
+        {/* ========================= */}
 
         {relatedMerchants.length > 0 && (
           <div className="mb-6">
@@ -909,91 +1077,6 @@ export default function MerchantDetail() {
         )}
       </main>
 
-      {showCouponModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-end z-50" onClick={() => setShowCouponModal(false)}>
-          <div className="bg-white rounded-t-2xl w-full max-w-md mx-auto animate-slideUp" onClick={e => e.stopPropagation()}>
-            <div className="p-4 border-b flex items-center justify-between">
-              <h3 className="font-bold text-gray-800">领券中心</h3>
-              <button onClick={() => setShowCouponModal(false)} className="text-gray-400 hover:text-gray-600">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <div className="p-4 max-h-96 overflow-y-auto">
-              {merchantCoupons.map((coupon) => (
-                <div key={coupon.id} className="border rounded-xl p-4 mb-3 flex items-center justify-between">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      {coupon.type === 'cash' ? (
-                        <span className="text-2xl font-bold text-orange-500">¥{coupon.value}</span>
-                      ) : (
-                        <span className="text-2xl font-bold text-orange-500">{coupon.value}%</span>
-                      )}
-                      <span className="text-gray-500 text-sm">满{coupon.minSpend}可用</span>
-                    </div>
-                    <p className="text-gray-400 text-xs mt-1">{coupon.name}</p>
-                  </div>
-                  <button
-                    onClick={() => handleCollectCoupon(coupon.id)}
-                    disabled={collectedCoupons.includes(coupon.id)}
-                    className={`px-4 py-2 rounded-full text-sm ${
-                      collectedCoupons.includes(coupon.id)
-                        ? 'bg-gray-100 text-gray-400'
-                        : 'bg-orange-500 text-white hover:bg-orange-600'
-                    }`}
-                  >
-                    {collectedCoupons.includes(coupon.id) ? '已领取' : '立即领取'}
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showPackageModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-end z-50" onClick={() => setShowPackageModal(false)}>
-          <div className="bg-white rounded-t-2xl w-full max-w-md mx-auto max-h-[80vh] flex flex-col animate-slideUp" onClick={e => e.stopPropagation()}>
-            <div className="p-4 border-b flex items-center justify-between shrink-0">
-              <h3 className="font-bold text-gray-800">套餐详情</h3>
-              <button onClick={() => setShowPackageModal(false)} className="text-gray-400 hover:text-gray-600">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <div className="p-4 overflow-y-auto">
-              {merchantPackages.map((pkg) => (
-                <div key={pkg.id} className="border rounded-xl p-4 mb-3">
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        {pkg.tag && (
-                          <span className="px-2 py-0.5 bg-red-500 text-white text-xs rounded">{pkg.tag}</span>
-                        )}
-                        <h4 className="font-medium text-gray-800">{pkg.name}</h4>
-                      </div>
-                      <p className="text-gray-500 text-sm mt-1">{pkg.description}</p>
-                      <p className="text-gray-400 text-xs mt-1">已售 {pkg.sales}+</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between mt-3">
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-2xl font-bold text-orange-500">¥{pkg.currentPrice}</span>
-                      <span className="text-gray-400 text-sm line-through">¥{pkg.originalPrice}</span>
-                      <span className="text-red-500 text-sm">{pkg.discount}</span>
-                    </div>
-                    <button className="px-6 py-2 bg-orange-500 text-white rounded-full text-sm hover:bg-orange-600">
-                      立即购买
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
 
       {showShareModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowShareModal(false)}>
