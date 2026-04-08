@@ -1,4 +1,4 @@
-const isDev = import.meta.env.DEV
+const isDev = typeof process !== 'undefined' ? process.env.NODE_ENV === 'development' : false
 
 export function logError(error, context = {}) {
   const errorInfo = {
