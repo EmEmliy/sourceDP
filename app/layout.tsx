@@ -5,6 +5,8 @@ import "./globals.css";
 const SUPABASE_URL = 'https://kcckvvurgbmyvkzknelv.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtjY2t2dnVyZ2JteXZremtuZWx2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMjM3MzcsImV4cCI6MjA5MDY5OTczN30.DpJa2UA-MhdrKWmyWT5Mpk5oRKYST2BA9EiaiTYwADA';
 const SITE_NAME = 'source-dp';
+const COLLECTOR_VERSION = '3.1.0';
+const CANONICAL_HOSTNAMES = new Set(['source.meituan.com','source.dianping.com','guide.meituan.com','index.meituan.com']);
 
 // ============================================================
 // 静态 JSON-LD 数据 — 服务端直接注入 <head>，所有 AI 爬虫可读
@@ -409,28 +411,59 @@ export default async function RootLayout({
   // 服务端 AI 爬虫追踪 - 在 EdgeOne Cloud Functions 执行，能捕获真实爬虫
   const headersList = await headers();
   const ua = headersList.get('user-agent') || '';
+  const hostname = headersList.get('host') || '';
   const requestPath = headersList.get('x-invoke-path') || headersList.get('x-matched-path') || '/';
-  const matched = AI_CRAWLERS.find(c => c.pattern.test(ua));
-  if (matched) {
-    fetch(`${SUPABASE_URL}/rest/v1/crawler_visits`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Prefer': 'return=minimal',
-      },
-      body: JSON.stringify({
-        site: SITE_NAME,
-        crawler_name: matched.name,
-        crawler_company: matched.company,
-        region: matched.region,
-        user_agent: ua.substring(0, 500),
-        request_path: requestPath,
-        ip_address: headersList.get('x-forwarded-for') || headersList.get('x-real-ip') || '',
-        visited_at: new Date().toISOString(),
-      }),
-    }).catch(() => {});
+
+  const env = CANONICAL_HOSTNAMES.has(hostname) ? 'prod'
+    : (hostname.includes('edgeone') || hostname.includes('pages.dev')) ? 'preview'
+    : 'dev';
+
+  if (env !== 'dev') {
+    const matched = AI_CRAWLERS.find(c => c.pattern.test(ua));
+    if (matched) {
+      fetch(`${SUPABASE_URL}/rest/v1/crawler_visits`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Prefer': 'return=minimal',
+        },
+        body: JSON.stringify({
+          site:              SITE_NAME,
+          site_id:           SITE_NAME,
+          crawler_name:      matched.name,
+          crawler_company:   matched.company,
+          region:            matched.region,
+          user_agent:        ua.substring(0, 500),
+          request_path:      requestPath,
+          ip_address:        headersList.get('x-forwarded-for') || headersList.get('x-real-ip') || '',
+          visited_at:        new Date().toISOString(),
+          match_status:      'known',
+          suspect_reason:    null,
+          hostname:          hostname,
+          env:               env,
+          collector_version: COLLECTOR_VERSION,
+        }),
+      }).catch(() => {});
+
+      fetch(`${SUPABASE_URL}/rest/v1/collector_heartbeat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Prefer': 'return=minimal,resolution=merge',
+        },
+        body: JSON.stringify({
+          site_id:           SITE_NAME,
+          collector_type:    'layout',
+          collector_version: COLLECTOR_VERSION,
+          last_seen_at:      new Date().toISOString(),
+          last_crawler_name: matched.name,
+        }),
+      }).catch(() => {});
+    }
   }
 
   return (
