@@ -18,6 +18,7 @@ import { ToastProvider } from './components/ui/Toast'
 import PullToRefresh from './components/ui/PullToRefresh'
 import { usePerformanceMonitor } from './hooks/usePerformance'
 import { setupGlobalErrorHandler, trackPageView } from './utils/errorTracking'
+import { LanguageProvider } from './contexts/LanguageContext'
 
 function AppContent() {
   usePerformanceMonitor()
@@ -64,9 +65,11 @@ function AppContent() {
 function App() {
   return (
     <ErrorBoundary>
-      <ToastProvider>
-        <AppContent />
-      </ToastProvider>
+      <LanguageProvider>
+        <ToastProvider>
+          <AppContent />
+        </ToastProvider>
+      </LanguageProvider>
     </ErrorBoundary>
   )
 }

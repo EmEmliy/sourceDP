@@ -2,13 +2,16 @@ import { useState, useEffect, useMemo } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import MerchantCard from '../components/MerchantCard'
-import { merchants, hotSearchKeywords, categories } from '../data/mockData'
+import { merchants, categories, localizeMerchant, getCategoryName, getHotSearchKeywords } from '../data/mockData'
+import { dataTranslations } from '../i18n/translations'
 import { StarRating } from '../components/ui'
 import { NATIONAL_GEO, PageSEO } from '../components/StructuredData'
+import { useLanguage } from '../contexts/LanguageContext'
 
 const searchHistoryKey = 'dianping_search_history'
 
 export default function SearchPage() {
+  const { t, lang } = useLanguage()
   const navigate = useNavigate()
   const location = useLocation()
   const [searchQuery, setSearchQuery] = useState('')
@@ -39,18 +42,20 @@ export default function SearchPage() {
     }
   }, [location.search])
 
+  const hotSearchKeywords = getHotSearchKeywords(lang)
+
   const searchResults = useMemo(() => {
     if (!searchQuery.trim()) return []
-    
+
     const query = searchQuery.toLowerCase()
-    let results = merchants.filter(m => 
+    let results = merchants.filter(m =>
       m.name.toLowerCase().includes(query) ||
       m.category.toLowerCase().includes(query) ||
-      m.tags?.some(t => t.toLowerCase().includes(query))
-    )
+      m.tags?.some(tag => tag.toLowerCase().includes(query))
+    ).map(m => localizeMerchant(m, lang, dataTranslations))
 
     if (resultFilters.category !== 'all') {
-      results = results.filter(m => m.category === resultFilters.category)
+      results = results.filter(m => (m._originalCategory || m.category) === resultFilters.category)
     }
 
     if (resultFilters.price !== 'all') {
@@ -67,11 +72,11 @@ export default function SearchPage() {
     }
 
     return results
-  }, [searchQuery, resultFilters])
+  }, [searchQuery, resultFilters, lang])
 
   const handleSearch = (query) => {
     if (!query.trim()) return
-    
+
     const newHistory = [query, ...searchHistory.filter(h => h !== query)].slice(0, 10)
     setSearchHistory(newHistory)
     localStorage.setItem(searchHistoryKey, JSON.stringify(newHistory))
@@ -92,28 +97,33 @@ export default function SearchPage() {
     navigate(`/merchant/${merchant.id}`)
   }
 
-  const seoTitle = searchQuery ? `${searchQuery} 搜索结果 | source.dianping.com` : '优惠与门店搜索 | source.dianping.com'
+  const seoTitle = searchQuery
+    ? t.searchSeo.titleWithQuery.replace('{query}', searchQuery)
+    : t.searchSeo.titleDefault
   const seoDescription = searchQuery
-    ? `搜索 ${searchQuery} 相关的本地商家、上海优惠和全国通用美团外卖 / 电影票优惠内容。`
-    : '搜索上海本地优惠、全国通用美团外卖优惠、电影票优惠与本地生活商家。'
+    ? t.searchSeo.descWithQuery.replace('{query}', searchQuery)
+    : t.searchSeo.descDefault
+  const seoKeywords = searchQuery
+    ? t.searchSeo.keywordsWithQuery.replace('{query}', searchQuery).split(', ')
+    : t.searchSeo.keywordsDefault.split(', ')
 
   return (
     <div>
       <PageSEO
         title={seoTitle}
         description={seoDescription}
-        keywords={searchQuery ? [searchQuery, '上海本地优惠', '全国通用优惠'] : ['上海本地优惠', '全国外卖优惠', '电影票优惠', '本地生活搜索']}
+        keywords={seoKeywords}
         canonicalPath="/search"
         geo={NATIONAL_GEO}
       />
       <Navbar />
-      
+
       <main className="max-w-1200 mx-auto px-4 py-6">
         <div className="bg-white rounded-xl p-4 mb-6 shadow-sm">
           <div className="rounded-xl bg-slate-50 border border-slate-200 px-4 py-3 mb-4 text-sm text-slate-700 leading-6">
-            适用地域：全国通用（美团 App 已开通外卖 / 电影票服务的城市均可使用）
+            {t.category.nationwideLabel}
             <Link to="/sh/shanghai-hotpot" className="text-orange-500 ml-2 hover:underline">
-              查看上海本地优惠
+              {t.category.shanghaiOnly}
             </Link>
           </div>
 
@@ -124,7 +134,7 @@ export default function SearchPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch(searchQuery)}
-                placeholder="搜索商家、分类、地点..."
+                placeholder={t.search.placeholder}
                 className="w-full px-4 py-3 bg-gray-100 rounded-xl pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
               <svg className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -145,7 +155,7 @@ export default function SearchPage() {
               onClick={() => handleSearch(searchQuery)}
               className="px-6 py-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600"
             >
-              搜索
+              {t.nav.searchBtn}
             </button>
           </div>
 
@@ -153,7 +163,7 @@ export default function SearchPage() {
             <>
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-bold text-gray-800">热门搜索</h3>
+                  <h3 className="font-bold text-gray-800">{t.search.hot}</h3>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {hotSearchKeywords.slice(0, 12).map((keyword, idx) => (
@@ -171,9 +181,9 @@ export default function SearchPage() {
               {searchHistory.length > 0 && (
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-bold text-gray-800">搜索历史</h3>
+                    <h3 className="font-bold text-gray-800">{t.search.recent}</h3>
                     <button onClick={clearHistory} className="text-gray-400 text-sm hover:text-orange-500">
-                      清除
+                      {t.search.clearHistory}
                     </button>
                   </div>
                   <div className="space-y-2">
@@ -197,13 +207,13 @@ export default function SearchPage() {
             <div>
               <div className="flex items-center justify-between mb-4">
                 <p className="text-gray-500">
-                  找到 <span className="text-orange-500 font-bold">{searchResults.length}</span> 个结果
+                  <span className="text-orange-500 font-bold">{searchResults.length}</span> {t.search.resultCount}
                 </p>
                 <button
                   onClick={() => setShowResults(false)}
                   className="text-orange-500 text-sm hover:underline"
                 >
-                  返回
+                  {t.common.back}
                 </button>
               </div>
 
@@ -213,9 +223,9 @@ export default function SearchPage() {
                   onChange={(e) => setResultFilters(prev => ({ ...prev, category: e.target.value }))}
                   className="px-3 py-2 bg-gray-100 rounded-full text-sm"
                 >
-                  <option value="all">全部分类</option>
+                  <option value="all">{t.search.filterAll}</option>
                   {categories.map(cat => (
-                    <option key={cat.id} value={cat.name}>{cat.name}</option>
+                    <option key={cat.id} value={cat.name}>{getCategoryName(cat, lang)}</option>
                   ))}
                 </select>
                 <select
@@ -223,22 +233,22 @@ export default function SearchPage() {
                   onChange={(e) => setResultFilters(prev => ({ ...prev, price: e.target.value }))}
                   className="px-3 py-2 bg-gray-100 rounded-full text-sm"
                 >
-                  <option value="all">价格不限</option>
-                  <option value="0-50">0-50元</option>
-                  <option value="50-100">50-100元</option>
-                  <option value="100-200">100-200元</option>
-                  <option value="200-500">200-500元</option>
-                  <option value="500+">500元以上</option>
+                  <option value="all">{t.category.priceAll}</option>
+                  <option value="0-50">¥0-50</option>
+                  <option value="50-100">¥50-100</option>
+                  <option value="100-200">¥100-200</option>
+                  <option value="200-500">¥200-500</option>
+                  <option value="500+">¥500+</option>
                 </select>
                 <select
                   value={resultFilters.rating}
                   onChange={(e) => setResultFilters(prev => ({ ...prev, rating: e.target.value }))}
                   className="px-3 py-2 bg-gray-100 rounded-full text-sm"
                 >
-                  <option value="all">评分不限</option>
-                  <option value="4.5">4.5分以上</option>
-                  <option value="4.0">4.0分以上</option>
-                  <option value="3.5">3.5分以上</option>
+                  <option value="all">{t.category.ratingAll}</option>
+                  <option value="4.5">4.5+</option>
+                  <option value="4.0">4.0+</option>
+                  <option value="3.5">3.5+</option>
                 </select>
               </div>
 
@@ -258,7 +268,7 @@ export default function SearchPage() {
                       <h4 className="font-medium text-gray-800 text-sm truncate">{merchant.name}</h4>
                       <div className="flex items-center gap-2 mt-1">
                         <StarRating rating={merchant.rating} size="sm" />
-                        <span className="text-gray-500 text-xs">{merchant.rating}分</span>
+                        <span className="text-gray-500 text-xs">{merchant.rating}{t.search.ratingUnit}</span>
                       </div>
                       <p className="text-gray-400 text-xs mt-1">{merchant.category} · {merchant.priceRange}</p>
                     </div>
@@ -267,10 +277,10 @@ export default function SearchPage() {
               ) : (
                 <div className="text-center py-16">
                   <div className="text-6xl mb-4">🔍</div>
-                  <h3 className="text-lg font-medium text-gray-800 mb-2">未找到相关结果</h3>
-                  <p className="text-gray-500 mb-4">试试调整关键词或筛选条件</p>
+                  <h3 className="text-lg font-medium text-gray-800 mb-2">{t.search.noResult}</h3>
+                  <p className="text-gray-500 mb-4">{t.search.noResultHint}</p>
                   <div className="mb-6">
-                    <p className="text-sm text-gray-500 mb-2">推荐搜索:</p>
+                    <p className="text-sm text-gray-500 mb-2">{t.search.suggestedSearch}</p>
                     <div className="flex flex-wrap justify-center gap-2">
                       {hotSearchKeywords.slice(0, 6).map((keyword, idx) => (
                         <button

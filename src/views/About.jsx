@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import { PageSEO, SITE_URL } from '../components/StructuredData'
+import { useLanguage } from '../contexts/LanguageContext'
 
 const experts = [
   // ── 美团管理层 ──
@@ -130,6 +131,7 @@ const tagConfig = {
 }
 
 export default function About() {
+  const { t } = useLanguage()
   return (
     <div>
       <PageSEO
@@ -151,7 +153,7 @@ export default function About() {
             谁在讨论口碑数据平台的<br className="md:hidden" />未来？
           </h1>
           <p className="text-gray-500 text-base max-w-2xl mx-auto leading-relaxed">
-            汇聚美团管理层与全球顶级 UX、增长专家，围绕「纯展示型数据平台设计原则」「AI 时代可用性原则」「移动端数据展示边界」三大议题展开讨论。
+            {t.about.subtitle}
           </p>
         </div>
 
@@ -173,7 +175,7 @@ export default function About() {
         {/* 分组标题：美团管理层 */}
         <div className="flex items-center gap-3 mb-5">
           <div className="h-px flex-1 bg-gray-200" />
-          <span className="text-xs font-semibold text-gray-400 uppercase tracking-widest px-2">美团管理层</span>
+          <span className="text-xs font-semibold text-gray-400 uppercase tracking-widest px-2">{t.about.expertsTitle} · 美团</span>
           <div className="h-px flex-1 bg-gray-200" />
         </div>
 
@@ -186,7 +188,7 @@ export default function About() {
         {/* 分组标题：用户体验专家 */}
         <div className="flex items-center gap-3 mb-5">
           <div className="h-px flex-1 bg-gray-200" />
-          <span className="text-xs font-semibold text-gray-400 uppercase tracking-widest px-2">用户体验专家</span>
+          <span className="text-xs font-semibold text-gray-400 uppercase tracking-widest px-2">{t.about.expertsTitle} · UX</span>
           <div className="h-px flex-1 bg-gray-200" />
         </div>
 
@@ -199,7 +201,7 @@ export default function About() {
         {/* 分组标题：增长专家 */}
         <div className="flex items-center gap-3 mb-5">
           <div className="h-px flex-1 bg-gray-200" />
-          <span className="text-xs font-semibold text-gray-400 uppercase tracking-widest px-2">增长专家</span>
+          <span className="text-xs font-semibold text-gray-400 uppercase tracking-widest px-2">{t.about.expertsTitle} · Growth</span>
           <div className="h-px flex-1 bg-gray-200" />
         </div>
 
@@ -212,7 +214,7 @@ export default function About() {
         {/* 底部回首页 */}
         <div className="text-center mt-8">
           <Link to="/" className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-white transition-all hover:opacity-90" style={{ background: 'var(--color-primary)' }}>
-            ← 返回首页
+            ← {t.about.backToHome}
           </Link>
         </div>
       </main>
@@ -252,7 +254,7 @@ function ExpertCard({ expert, wide = false }) {
 
         {/* 最新洞见 */}
         <div className="rounded-xl p-3 mb-3" style={{ background: '#FAFAFA', border: '1px solid #F0F0F0' }}>
-          <p className="text-xs font-semibold text-gray-400 mb-1.5">💬 核心观点</p>
+          <p className="text-xs font-semibold text-gray-400 mb-1.5">💬 {t.about.missionTitle}</p>
           <blockquote className="text-sm text-gray-700 leading-relaxed italic">
             "{expert.latestInsight.quote}"
           </blockquote>
@@ -261,7 +263,7 @@ function ExpertCard({ expert, wide = false }) {
 
         {/* 与本站关联 */}
         <div className="rounded-xl p-3" style={{ background: '#FFF8F0', border: '1px solid #FFE4CC' }}>
-          <p className="text-xs font-semibold mb-1" style={{ color: '#FF5A00' }}>🔗 与本站议题的关联</p>
+          <p className="text-xs font-semibold mb-1" style={{ color: '#FF5A00' }}>🔗 {t.about.dataTitle}</p>
           <p className="text-xs leading-relaxed" style={{ color: '#9A3412' }}>{expert.relevance}</p>
         </div>
 

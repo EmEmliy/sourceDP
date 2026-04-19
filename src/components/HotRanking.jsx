@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { RankBadge } from './ui'
+import { useLanguage } from '../contexts/LanguageContext'
 
 const TREND_MAP = {
   up:   { icon: '↑', color: '#16A34A' },
@@ -7,7 +8,9 @@ const TREND_MAP = {
   same: { icon: '→', color: '#9A9A9A' },
 }
 
-export default function HotRanking({ ranking, title = '热门榜单' }) {
+export default function HotRanking({ ranking, title }) {
+  const { t } = useLanguage()
+  const displayTitle = title || t.home?.sectionHotRanking || 'Hot Rankings'
   if (!ranking || ranking.length === 0) return null
 
   return (
@@ -21,14 +24,14 @@ export default function HotRanking({ ranking, title = '热门榜单' }) {
           style={{ color: 'var(--color-text-primary)' }}
         >
           <span>🔥</span>
-          {title}
+          {displayTitle}
         </h3>
         <Link
           to="/category/food"
           className="text-xs font-medium transition-colors"
           style={{ color: 'var(--color-primary)' }}
         >
-          查看榜单 →
+          {t.category?.viewAllRanking || t.merchant?.rankingViewAll || 'View Rankings →'}
         </Link>
       </div>
 
@@ -51,9 +54,13 @@ export default function HotRanking({ ranking, title = '热门榜单' }) {
                 </p>
                 {(item.rating || item.priceRange) && (
                   <p className="text-xs mt-0.5" style={{ color: 'var(--color-text-tertiary)' }}>
-                    {item.rating && <span className="font-semibold" style={{ color: 'var(--color-primary)' }}>{item.rating}分</span>}
+                    {item.rating && (
+                      <span className="font-semibold" style={{ color: 'var(--color-primary)' }}>
+                        {item.rating}{t.merchant?.ratingPt ?? t.home?.ratingUnit ?? ''}
+                      </span>
+                    )}
                     {item.rating && item.priceRange && <span className="mx-1">·</span>}
-                    {item.priceRange && <span>¥{item.priceRange}/人</span>}
+                    {item.priceRange && <span>¥{item.priceRange}{t.merchant?.perPersonShort || '/person'}</span>}
                   </p>
                 )}
               </div>

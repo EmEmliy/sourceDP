@@ -1,9 +1,10 @@
 import { useState } from 'react'
+import { useLanguage } from '../../contexts/LanguageContext'
 
 // 用腾讯地图 iframe 嵌入，无需 API key
-// 地址：https://map.qq.com/api/js 或直接使用 maps.qq.com 分享链接
 export default function MerchantMap({ location, name, latitude, longitude }) {
   const [mapError, setMapError] = useState(false)
+  const { t } = useLanguage()
 
   // 优先使用经纬度，否则用地址文本
   const searchQuery = latitude && longitude
@@ -23,22 +24,27 @@ export default function MerchantMap({ location, name, latitude, longitude }) {
   // 如果有经纬度，使用百度静态地图图片；否则降级为腾讯地图 iframe
   const useStaticImage = !!(latitude && longitude && baiduStaticUrl)
 
+  const viewOnMapLabel = t.detail?.viewOnMap || 'View on Map'
+  const tencentLabel = t.detail?.mapTencent || 'Tencent Maps'
+  const googleLabel = t.detail?.mapGoogle || 'Google Maps'
+  const baiduLabel = t.detail?.mapBaidu || 'Baidu Maps'
+
   return (
     <div className="bg-gray-100 rounded-lg overflow-hidden">
       <div className="relative h-48 bg-gray-200">
         {mapError ? (
-          <MapFallback location={location} name={name} tencentMapUrl={tencentMapUrl} />
+          <MapFallback location={location} name={name} tencentMapUrl={tencentMapUrl} label={viewOnMapLabel} />
         ) : useStaticImage ? (
           <img
             src={baiduStaticUrl}
-            alt={`${name} 位置地图`}
+            alt={`${name} map`}
             className="w-full h-full object-cover"
             onError={() => setMapError(true)}
           />
         ) : (
           <iframe
             src={tencentMapUrl}
-            title={`${name || location} 地图`}
+            title={`${name || location} map`}
             className="w-full h-full border-0"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
@@ -61,7 +67,7 @@ export default function MerchantMap({ location, name, latitude, longitude }) {
                 rel="noopener noreferrer"
                 className="text-xs text-orange-500 hover:underline"
               >
-                腾讯地图
+                {tencentLabel}
               </a>
               <a
                 href={`https://maps.google.com/?q=${encodeURIComponent(location || '')}`}
@@ -69,7 +75,7 @@ export default function MerchantMap({ location, name, latitude, longitude }) {
                 rel="noopener noreferrer"
                 className="text-xs text-orange-500 hover:underline"
               >
-                Google 地图
+                {googleLabel}
               </a>
               <a
                 href={`https://api.map.baidu.com/geocoder?address=${encodeURIComponent(location || '')}&output=html`}
@@ -77,7 +83,7 @@ export default function MerchantMap({ location, name, latitude, longitude }) {
                 rel="noopener noreferrer"
                 className="text-xs text-orange-500 hover:underline"
               >
-                百度地图
+                {baiduLabel}
               </a>
             </div>
           </div>
@@ -87,7 +93,7 @@ export default function MerchantMap({ location, name, latitude, longitude }) {
   )
 }
 
-function MapFallback({ location, name, tencentMapUrl }) {
+function MapFallback({ location, name, tencentMapUrl, label }) {
   return (
     <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-orange-50 to-red-50 gap-3">
       <div className="text-center">
@@ -101,7 +107,7 @@ function MapFallback({ location, name, tencentMapUrl }) {
         rel="noopener noreferrer"
         className="px-4 py-2 bg-orange-500 text-white text-sm rounded-full hover:bg-orange-600 transition-colors"
       >
-        在地图中查看
+        {label}
       </a>
     </div>
   )

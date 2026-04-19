@@ -1,25 +1,16 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useLanguage } from '../contexts/LanguageContext'
+import LanguageSwitcher from './LanguageSwitcher'
 
 export default function Navbar() {
   const navigate = useNavigate()
   const [searchQuery, setSearchQuery] = useState('')
   const [showSuggestions, setShowSuggestions] = useState(false)
+  const { t } = useLanguage()
 
-  const categories = [
-    { id: 'food-dinein',      name: '到餐',  icon: '🍽️', link: '/category/food' },
-    { id: 'shanghai-local',   name: '上海本地', icon: '📍', link: '/sh/shanghai-hotpot' },
-    { id: 'hotel',            name: '酒旅',  icon: '🏨', link: '/category/hotel' },
-    { id: 'movie',            name: '电影',  icon: '🎬', link: '/category/movie' },
-    { id: 'beauty-medical',   name: '医美',  icon: '💅', link: '/category/medical' },
-    { id: 'beauty',           name: '丽人',  icon: '💄', link: '/category/beauty' },
-    { id: 'fitness',          name: '健身',  icon: '🏋️', link: '/category/fitness' },
-    { id: 'food',             name: '外卖',  icon: '🍜', link: '/category/food' },
-    { id: 'shopping',         name: '闪购',  icon: '🛒', link: '/coupons' },
-    { id: 'medical',          name: '医药',  icon: '💊', link: '/category/medical' },
-    { id: 'home',             name: '家政',  icon: '🧹', link: '/category/home' },
-    { id: 'nationwide-deals', name: '全国优惠', icon: '🌐', link: '/coupons' },
-  ]
+  const categories = t.nav.categories
+  const suggestions = t.nav.suggestions
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
@@ -28,14 +19,6 @@ export default function Navbar() {
       navigate('/search')
     }
   }
-
-  const suggestions = [
-    { text: '海底捞火锅', tag: '热门' },
-    { text: '上海火锅推荐', tag: '热搜' },
-    { text: '北京豪华酒店', tag: '' },
-    { text: '米其林餐厅', tag: '精选' },
-    { text: '超级猩猩健身', tag: '' },
-  ]
 
   return (
     <nav
@@ -46,7 +29,7 @@ export default function Navbar() {
     >
       <div className="max-w-1200 mx-auto px-4">
 
-        {/* ── 顶部栏：Logo + 搜索 ── */}
+        {/* ── 顶部栏：Logo + 搜索 + 语言切换 ── */}
         <div className="flex items-center gap-3 h-14">
           <Link
             to="/"
@@ -63,7 +46,10 @@ export default function Navbar() {
               className="text-base font-bold hidden sm:block"
               style={{ color: 'var(--color-text-primary)', letterSpacing: '-0.01em' }}
             >
-              点评 <span style={{ color: 'var(--color-primary)' }}>Source</span>
+              {t.nav.brand.split(' ')[0]}{' '}
+              <span style={{ color: 'var(--color-primary)' }}>
+                {t.nav.brand.split(' ').slice(1).join(' ') || 'Source'}
+              </span>
             </span>
           </Link>
 
@@ -89,10 +75,10 @@ export default function Navbar() {
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                 onFocus={() => setShowSuggestions(true)}
                 onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                aria-label="搜索商家、品类、地点"
+                aria-label={t.nav.searchPlaceholder}
                 aria-expanded={showSuggestions}
                 aria-autocomplete="list"
-                placeholder="搜索商家、品类、地点"
+                placeholder={t.nav.searchPlaceholder}
                 className="flex-1 bg-transparent text-sm outline-none min-w-0"
                 style={{ color: 'var(--color-text-primary)' }}
               />
@@ -100,7 +86,7 @@ export default function Navbar() {
                 <button
                   onClick={() => setSearchQuery('')}
                   className="px-2 text-gray-400 hover:text-gray-600 flex-shrink-0"
-                  aria-label="清空搜索"
+                  aria-label={t.nav.clearSearch}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -112,7 +98,7 @@ export default function Navbar() {
                 className="m-1 h-8 px-4 rounded-full text-white text-sm font-semibold flex-shrink-0 transition-opacity hover:opacity-90 active:scale-95"
                 style={{ background: 'linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))' }}
               >
-                搜索
+                {t.nav.searchBtn}
               </button>
             </div>
 
@@ -128,7 +114,7 @@ export default function Navbar() {
                 }}
               >
                 <div className="px-4 pt-3 pb-1">
-                  <p className="text-xs font-medium" style={{ color: 'var(--color-text-tertiary)' }}>热门搜索</p>
+                  <p className="text-xs font-medium" style={{ color: 'var(--color-text-tertiary)' }}>{t.nav.hotSearchLabel}</p>
                 </div>
                 <div className="pb-2">
                   {suggestions.map((s, index) => (
@@ -155,6 +141,9 @@ export default function Navbar() {
               </div>
             )}
           </div>
+
+          {/* 语言切换器 */}
+          <LanguageSwitcher />
         </div>
 
         {/* ── 分类导航 ── */}

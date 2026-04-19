@@ -1,53 +1,60 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import { useLanguage } from '../contexts/LanguageContext'
 
-const banners = [
+// 轮播图基础配置（不含文本）
+const bannerConfigs = [
   {
     id: 1,
     image: '/images/banner/banner_hotpot.jpg',
-    title: '🎉 周末半价狂欢节',
-    subtitle: '每周六日 · 火锅/烧烤/日料半价抢 · 海底捞/巴奴/捞王等热门餐厅参与',
     link: '/category/food',
     gradient: 'from-red-700/85 via-red-600/55 to-transparent',
+    titleKey: 'banner1Title',
+    subtitleKey: 'banner1Subtitle',
   },
   {
     id: 2,
     image: '/images/banner/banner_food.jpg',
-    title: '👑 会员免单',
-    subtitle: '美团会员专享 · 每月抽免单名额 · 加入会员立享外卖/到店双重权益',
     link: '/category/food',
     gradient: 'from-orange-700/85 via-orange-500/55 to-transparent',
+    titleKey: 'banner2Title',
+    subtitleKey: 'banner2Subtitle',
   },
   {
     id: 3,
     image: '/images/banner/banner_hotel.jpg',
-    title: '酒店民宿特惠季',
-    subtitle: '希尔顿·香格里拉·亚朵 · 会员价低至5折 · 周末出行首选',
     link: '/category/hotel',
     gradient: 'from-slate-800/80 via-slate-700/50 to-transparent',
+    titleKey: 'banner3Title',
+    subtitleKey: 'banner3Subtitle',
   },
   {
     id: 4,
     image: '/images/banner/banner_beauty.jpg',
-    title: '丽人服务专场',
-    subtitle: '美容·美发·美甲 · 新客7折 · 周末到店立享优惠',
     link: '/category/beauty',
     gradient: 'from-pink-700/80 via-pink-600/50 to-transparent',
+    titleKey: 'banner4Title',
+    subtitleKey: 'banner4Subtitle',
   },
   {
     id: 5,
     image: '/images/banner/banner_fitness.jpg',
-    title: '健身体验周',
-    subtitle: '超级猩猩·乐刻运动 · 首月免费体验 · 会员专属福利',
     link: '/category/fitness',
     gradient: 'from-emerald-800/80 via-emerald-700/50 to-transparent',
+    titleKey: 'banner5Title',
+    subtitleKey: 'banner5Subtitle',
   },
 ]
 
 export default function Carousel({ banners: customBanners }) {
+  const { t } = useLanguage()
   const [current, setCurrent] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
-  const displayBanners = customBanners || banners
+  const displayBanners = customBanners || bannerConfigs.map(b => ({
+    ...b,
+    title: t.carousel[b.titleKey],
+    subtitle: t.carousel[b.subtitleKey],
+  }))
   const total = displayBanners.length
   const touchStartX = useRef(0)
   const touchDeltaX = useRef(0)
@@ -123,7 +130,7 @@ export default function Carousel({ banners: customBanners }) {
               draggable={false}
             />
 
-            {/* 渐变遮罩——左侧深，右侧透明 */}
+            {/* 渐变遮罩 */}
             <div
               className={`absolute inset-0 bg-gradient-to-r ${banner.gradient}`}
             />
@@ -145,7 +152,7 @@ export default function Carousel({ banners: customBanners }) {
                 className="mt-3 inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold text-white"
                 style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.3)' }}
               >
-                立即查看
+                {t.carousel.viewNow}
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                 </svg>
@@ -161,7 +168,7 @@ export default function Carousel({ banners: customBanners }) {
         className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full items-center justify-center text-white
                    hidden md:flex transition-all hover:scale-110 active:scale-95"
         style={{ background: 'rgba(0,0,0,0.28)', backdropFilter: 'blur(4px)', border: '1px solid rgba(255,255,255,0.2)' }}
-        aria-label="上一张"
+        aria-label={t.carousel.prevSlide}
       >
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
@@ -172,7 +179,7 @@ export default function Carousel({ banners: customBanners }) {
         className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full items-center justify-center text-white
                    hidden md:flex transition-all hover:scale-110 active:scale-95"
         style={{ background: 'rgba(0,0,0,0.28)', backdropFilter: 'blur(4px)', border: '1px solid rgba(255,255,255,0.2)' }}
-        aria-label="下一张"
+        aria-label={t.carousel.nextSlide}
       >
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
@@ -185,7 +192,7 @@ export default function Carousel({ banners: customBanners }) {
           <button
             key={index}
             onClick={() => { setCurrent(index); stopAutoPlay(); setTimeout(startAutoPlay, 5000) }}
-            aria-label={`第${index + 1}张`}
+            aria-label={t.carousel.slideLabel.replace('{n}', index + 1)}
             className="rounded-full transition-all duration-300"
             style={{
               width: index === current ? '20px' : '6px',

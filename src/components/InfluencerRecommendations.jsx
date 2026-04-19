@@ -1,14 +1,20 @@
 import { Link } from 'react-router-dom'
 import { Tag } from './ui'
+import { useLanguage } from '../contexts/LanguageContext'
 
 export default function InfluencerRecommendations({ influencers }) {
+  const { t } = useLanguage()
   if (!influencers || influencers.length === 0) return null
 
   return (
     <section>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-bold text-gray-800">达人推荐</h2>
-        <span className="text-orange-500 text-sm">更多达人</span>
+        <h2 className="text-lg font-bold text-gray-800">
+          {t.merchant?.influencerTitle || t.home?.sectionInfluencer || 'Influencer Picks'}
+        </h2>
+        <span className="text-orange-500 text-sm">
+          {t.merchant?.influencerMore || 'More'}
+        </span>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -23,7 +29,7 @@ export default function InfluencerRecommendations({ influencers }) {
               <div className="flex-1 min-w-0">
                 <h4 className="font-medium text-gray-800 truncate">{influencer.name}</h4>
                 <p className="text-xs text-gray-500">
-                  {(influencer.followers / 10000).toFixed(1)}万粉丝
+                  {(influencer.followers / 10000).toFixed(1)}{t.merchant?.influencerFollowers || 'K followers'}
                 </p>
               </div>
             </div>
@@ -46,7 +52,9 @@ export default function InfluencerRecommendations({ influencers }) {
                   />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-gray-700 truncate">{merchant.name}</p>
-                    <p className="text-xs text-orange-500">{merchant.rating}分</p>
+                    <p className="text-xs text-orange-500">
+                      {merchant.rating}{t.merchant?.ratingPt ?? t.home?.ratingUnit ?? ''}
+                    </p>
                   </div>
                 </Link>
               ))}

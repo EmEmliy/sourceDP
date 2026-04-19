@@ -1,13 +1,17 @@
 import { Link } from 'react-router-dom'
 import { StarRating, PriceDisplay, TagList, DiscountTag } from './ui'
+import { useLanguage } from '../contexts/LanguageContext'
 
-export default function RecommendationList({ merchants, title = '猜你喜欢' }) {
+export default function RecommendationList({ merchants, title }) {
+  const { t } = useLanguage()
+  const displayTitle = title || t.home?.sectionRecommend || 'Recommended'
+
   return (
     <section>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-bold text-gray-800">{title}</h2>
+        <h2 className="text-lg font-bold text-gray-800">{displayTitle}</h2>
         <Link to="/category/food" className="text-orange-500 text-sm hover:underline flex items-center gap-1">
-          查看更多
+          {t.merchant?.viewMore || t.home?.viewAll || 'View More'}
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
@@ -24,7 +28,7 @@ export default function RecommendationList({ merchants, title = '猜你喜欢' }
             <div className="relative aspect-[4/3] overflow-hidden">
               <img
                 src={merchant.images?.[0] || merchant.image}
-                alt={`${merchant.name} ${merchant.category || ''} 口碑评分${merchant.rating || ''}分 人均${merchant.priceRange || ''}`}
+                alt={`${merchant.name} ${merchant.category || ''} ${merchant.rating || ''}`}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
               {merchant.discount && (

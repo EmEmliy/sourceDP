@@ -136,17 +136,582 @@ const randomItems = (arr, count) => {
 }
 
 export const categories = [
-  { id: 'food', name: '美食', icon: '🍜', subCategories: ['火锅', '烧烤', '川菜', '粤菜', '日料', '西餐', '小吃', '快餐'] },
-  { id: 'hotel', name: '酒店', icon: '🏨', subCategories: ['豪华酒店', '商务酒店', '民宿', '快捷酒店', '公寓'] },
-  { id: 'movie', name: '电影', icon: '🎬', subCategories: ['热映中', '即将上映', 'IMAX', '4DX'] },
-  { id: 'beauty', name: '丽人', icon: '💄', subCategories: ['美容', '美发', '美甲', 'SPA', '化妆'] },
-  { id: 'fitness', name: '健身', icon: '🏋️', subCategories: ['健身房', '瑜伽', '游泳', '羽毛球', '篮球'] },
-  { id: 'home', name: '家政', icon: '🧹', subCategories: ['保洁', '月嫂', '搬家', '维修', '开锁'] },
-  { id: 'medical', name: '医美', icon: '💅', subCategories: ['整形', '皮肤管理', '口腔', '眼科'] },
-  { id: 'shopping', name: '购物', icon: '🛍️', subCategories: ['商场', '超市', '便利店', '专卖店'] },
-  { id: 'education', name: '培训', icon: '📚', subCategories: ['语言', 'IT', '音乐', '美术', '舞蹈'] },
-  { id: 'entertainment', name: '休闲', icon: '🎮', subCategories: ['KTV', '酒吧', '咖啡', '茶馆', '网吧'] },
+  { id: 'food',          name: '美食', nameEn: 'Food',        nameJa: 'グルメ',       nameEs: 'Comida',      icon: '🍜', subCategories: ['火锅', '烧烤', '川菜', '粤菜', '日料', '西餐', '小吃', '快餐'] },
+  { id: 'hotel',         name: '酒店', nameEn: 'Hotels',      nameJa: 'ホテル',       nameEs: 'Hoteles',     icon: '🏨', subCategories: ['豪华酒店', '商务酒店', '民宿', '快捷酒店', '公寓'] },
+  { id: 'movie',         name: '电影', nameEn: 'Movies',      nameJa: '映画',         nameEs: 'Cine',        icon: '🎬', subCategories: ['热映中', '即将上映', 'IMAX', '4DX'] },
+  { id: 'beauty',        name: '丽人', nameEn: 'Beauty',      nameJa: '美容',         nameEs: 'Belleza',     icon: '💄', subCategories: ['美容', '美发', '美甲', 'SPA', '化妆'] },
+  { id: 'fitness',       name: '健身', nameEn: 'Fitness',     nameJa: 'フィットネス', nameEs: 'Fitness',     icon: '🏋️', subCategories: ['健身房', '瑜伽', '游泳', '羽毛球', '篮球'] },
+  { id: 'home',          name: '家政', nameEn: 'Home Svc',    nameJa: '家政',         nameEs: 'Hogar',       icon: '🧹', subCategories: ['保洁', '月嫂', '搬家', '维修', '开锁'] },
+  { id: 'medical',       name: '医美', nameEn: 'Aesthetic',   nameJa: '美容医療',     nameEs: 'Estética',    icon: '💅', subCategories: ['整形', '皮肤管理', '口腔', '眼科'] },
+  { id: 'shopping',      name: '购物', nameEn: 'Shopping',    nameJa: 'ショッピング', nameEs: 'Compras',     icon: '🛍️', subCategories: ['商场', '超市', '便利店', '专卖店'] },
+  { id: 'education',     name: '培训', nameEn: 'Education',   nameJa: '教育',         nameEs: 'Educación',   icon: '📚', subCategories: ['语言', 'IT', '音乐', '美术', '舞蹈'] },
+  { id: 'entertainment', name: '休闲', nameEn: 'Leisure',     nameJa: 'レジャー',     nameEs: 'Ocio',        icon: '🎮', subCategories: ['KTV', '酒吧', '咖啡', '茶馆', '网吧'] },
 ]
+
+// ── 商家名称多语言翻译字典 ──
+// key = 原始中文名，value = { en, ja, es }
+const merchantNameI18n = {
+  // 火锅
+  '海底捞火锅（吴中路店）': { en: 'Haidilao Hot Pot (Wuzhong Rd)', ja: '海底撈火鍋（呉中路店）', es: 'Haidilao Hot Pot (Wuzhong)' },
+  '潮汕牛肉火锅(望京店)':   { en: 'Chaoshan Beef Hot Pot (Wangjing)', ja: '潮汕牛肉火鍋（望京店）', es: 'Fondue Chaoshan (Wangjing)' },
+  '小龙坎老火锅':            { en: 'Xiaolongkan Old Hot Pot', ja: '小龍坎老火鍋', es: 'Xiaolongkan Hot Pot Clásico' },
+  '呷哺呷哺火锅（嘉定嘉实店）': { en: 'Xiabuxiabu Hot Pot (Jiading)', ja: 'しゃぶしゃぶ（嘉定店）', es: 'Xiabuxiabu (Jiading)' },
+  '捞王锅物料理（凯旋路店）': { en: 'Laowang Hot Pot (Kaixuan Rd)', ja: '捞王鍋料理（凱旋路店）', es: 'Laowang Hot Pot (Kaixuan)' },
+  '海底捞智慧餐厅':          { en: 'Haidilao Smart Restaurant', ja: '海底撈スマートレストラン', es: 'Haidilao Restaurante Inteligente' },
+  '巴奴毛肚火锅（上海店）':  { en: 'Banu Tripe Hot Pot (Shanghai)', ja: '巴奴毛肚火鍋（上海店）', es: 'Banu Hot Pot (Shanghái)' },
+  '电台巷火锅':              { en: 'Radio Lane Hot Pot', ja: 'ラジオ横丁火鍋', es: 'Hot Pot Callejón Radio' },
+  '大龙燚火锅':              { en: 'Dalongyi Hot Pot', ja: '大龍燚火鍋', es: 'Dalongyi Hot Pot' },
+  '椰子鸡火锅':              { en: 'Coconut Chicken Hot Pot', ja: 'ヤシの実チキン火鍋', es: 'Hot Pot Pollo Coco' },
+  '老北京涮羊肉':            { en: 'Old Beijing Lamb Hot Pot', ja: '老北京羊しゃぶしゃぶ', es: 'Cordero al Estilo Pekín' },
+  '椰香泰式火锅':            { en: 'Coconut Thai Hot Pot', ja: 'ヤシの実タイ火鍋', es: 'Fondue Thai de Coco' },
+  // 烧烤
+  '很久以前羊肉串（上海店）': { en: 'Henjiuyiqian Lamb Skewers (SH)', ja: '昔からの羊串焼き（上海店）', es: 'Pinchos de Cordero Henjiuyiqian' },
+  '木屋烧烤（上海店）':      { en: 'Log Cabin BBQ (Shanghai)', ja: 'ログキャビンBBQ（上海店）', es: 'BBQ Cabaña de Madera (SH)' },
+  '南门烧烤':                { en: 'South Gate BBQ', ja: '南門焼肉', es: 'BBQ Puerta Sur' },
+  '串亭烧烤居酒屋':          { en: 'Chuan Ting BBQ Izakaya', ja: '串亭焼肉居酒屋', es: 'Izakaya BBQ Chuan Ting' },
+  '丰茂烤串':                { en: 'Fengmao Skewers', ja: '豊茂串焼き', es: 'Pinchos Fengmao' },
+  '冰城串吧':                { en: 'Bingcheng Skewer Bar', ja: '氷城串バー', es: 'Bar Pinchos Bingcheng' },
+  '管氏翅吧':                { en: 'Guan\'s Wing Bar', ja: '管氏チキンウイングバー', es: 'Bar de Alitas Guan' },
+  '烤肉刘炙子烤肉':          { en: 'Liu\'s Korean BBQ', ja: '劉氏炙子焼肉', es: 'Barbacoa Coreana Liu' },
+  '破店肥哈':                { en: 'Broken Shop BBQ', ja: 'ぼろ店焼肉', es: 'BBQ Tienda Rota' },
+  '青年路烧烤大排档':        { en: 'Youth Road BBQ Stall', ja: '青年路焼肉屋台', es: 'Puesto BBQ Calle Juventud' },
+  // 川菜
+  '眉山东坡酒家':            { en: 'Dongpo Cuisine Meishan', ja: '眉山東坡酒家', es: 'Cocina Dongpo Meishan' },
+  '川国演义':                { en: 'Sichuan Kingdom Story', ja: '川国演義', es: 'Historia del Reino Sichuan' },
+  '蜀大侠火锅':              { en: 'Shu Hero Hot Pot', ja: '蜀大侠火鍋', es: 'Hot Pot Héroe Shu' },
+  '蓉上坊':                  { en: 'Rong Workshop', ja: '蓉上坊', es: 'Taller Rong' },
+  '老成都川菜馆':            { en: 'Old Chengdu Sichuan Kitchen', ja: '老成都四川料理', es: 'Cocina Sichuan Viejo Chengdu' },
+  '锦府盐帮菜':              { en: 'Jinfu Salt Gang Cuisine', ja: '錦府塩幇料理', es: 'Cocina Sal Gang Jinfu' },
+  '麻六甲':                  { en: 'Malacca Spice Kitchen', ja: 'マラッカスパイスキッチン', es: 'Cocina Malaca' },
+  '红辣椒川菜':              { en: 'Red Chili Sichuan', ja: '赤唐辛子四川料理', es: 'Chile Rojo Sichuan' },
+  '川味坊':                  { en: 'Sichuan Flavor House', ja: '四川風味坊', es: 'Casa del Sabor Sichuan' },
+  '蜀风雅韵':                { en: 'Shu Elegance', ja: '蜀の雅韻', es: 'Elegancia Shu' },
+  '蓉和川菜':                { en: 'Ronghe Sichuan', ja: '蓉和四川料理', es: 'Ronghe Sichuan' },
+  // 粤菜
+  '粤菜王':                  { en: 'Cantonese King', ja: '広東料理王', es: 'Rey Cantonés' },
+  '陶陶居':                  { en: 'Taotaoju Cantonese', ja: '陶陶居広東料理', es: 'Taotaoju Cantonés' },
+  '利苑酒家':                { en: 'Lei Garden', ja: '利苑酒家', es: 'Jardín Lei' },
+  '点都德':                  { en: 'Dim Tu Duk Dim Sum', ja: '点都徳飲茶', es: 'Dim Sum Dim Tu Duk' },
+  '广州酒家':                { en: 'Guangzhou Restaurant', ja: '広州酒家', es: 'Restaurante Guangzhou' },
+  '惠食佳':                  { en: 'Hui Shi Jia Cantonese', ja: '恵食佳広東料理', es: 'Hui Shi Jia Cantonés' },
+  '潮汕菜馆':                { en: 'Chaoshan Cuisine', ja: '潮汕料理', es: 'Cocina Chaoshan' },
+  '炳胜品味':                { en: 'Bing Sheng Fine Dining', ja: '炳勝品味', es: 'Bing Sheng Gourmet' },
+  '莲香楼':                  { en: 'Lin Heung Cantonese', ja: '蓮香楼', es: 'Lin Heung Cantonés' },
+  '荔湾名食家':              { en: 'Liwan Food Master', ja: '荔湾名食家', es: 'Maestro Gastronómico Liwan' },
+  '海门鱼仔店':              { en: 'Haimen Fish Restaurant', ja: '海門小魚店', es: 'Pescadería Haimen' },
+  // 日料
+  '鮨·日本料理':            { en: 'Sushi Omakase', ja: '鮨・日本料理', es: 'Sushi Omakase' },
+  '酒吞':                    { en: 'Shuten Japanese', ja: '酒呑', es: 'Japonés Shuten' },
+  '元气寿司':                { en: 'Genki Sushi', ja: '元気寿司', es: 'Sushi Genki' },
+  '隐泉日本料理':            { en: 'Hidden Spring Japanese', ja: '隠泉日本料理', es: 'Japonés Fuente Oculta' },
+  '大喜屋':                  { en: 'Daiki Restaurant', ja: '大喜屋', es: 'Restaurante Daiki' },
+  '禾绿回转寿司':            { en: 'Heiroku Sushi Conveyor', ja: '禾緑回転寿司', es: 'Sushi Conveyor Heiroku' },
+  '黑牛的店':                { en: 'Black Bull BBQ', ja: '黒牛の店', es: 'Asador Toro Negro' },
+  '将太无二':                { en: 'Shota Sushi', ja: '将太の寿司', es: 'Sushi Shota' },
+  '奈九日本料理':            { en: 'Naiku Japanese', ja: '奈九日本料理', es: 'Japonés Naiku' },
+  // 中餐 / 小吃 / 快餐
+  '外婆家（上海徐汇龙吴路店）': { en: 'Grandma\'s Kitchen (Xuhui)', ja: 'おばあちゃんの家（上海徐匯店）', es: 'La Abuela (Xuhui SH)' },
+  '太二酸菜鱼（上海万象城店）': { en: 'Tai Er Sauerkraut Fish (SH)', ja: '太二酸菜魚（上海万象城店）', es: 'Tai Er Pez Choucroute (SH)' },
+  '全聚德烤鸭（紫荆广场店）':   { en: 'Quanjude Peking Duck (Zijing)', ja: '全聚徳北京ダック（紫荊広場）', es: 'Pato Pekín Quanjude' },
+  '沙县小吃':                { en: 'Shaxian Snacks', ja: '沙県小食', es: 'Bocadillos Shaxian' },
+  '兰州拉面':                { en: 'Lanzhou Beef Noodles', ja: '蘭州牛肉ラーメン', es: 'Fideos Lanzhou' },
+  '黄焖鸡米饭':              { en: 'Braised Chicken Rice', ja: '黄焖鶏ご飯', es: 'Arroz Pollo Estofado' },
+  '老乡鸡（上海临港百联店）': { en: 'Laoxiang Chicken (Lingang)', ja: '老郷鶏（上海臨港店）', es: 'Pollo Laoxiang (Lingang)' },
+  '袁记云饺':                { en: 'Yuan\'s Cloud Dumplings', ja: '袁記雲餃子', es: 'Dumplings Nube Yuan' },
+  '正新鸡排':                { en: 'Zhengxin Chicken Cutlet', ja: '正新チキンカツ', es: 'Milanesa Zhengxin' },
+  '绝味鸭脖':                { en: 'Juewei Duck Neck', ja: '絶味アヒルの首', es: 'Cuello de Pato Juewei' },
+  '便利蜂':                  { en: 'Bianlifeng Convenience', ja: 'ビアンリフェンコンビニ', es: 'Tienda Bianlifeng' },
+  '711便利店':               { en: '7-Eleven', ja: 'セブンイレブン', es: '7-Eleven' },
+  '罗森便利店':              { en: 'Lawson Convenience', ja: 'ローソン', es: 'Lawson' },
+  '便利蜂热食':              { en: 'Bianlifeng Hot Food', ja: 'ビアンリフェンホットフード', es: 'Comida Caliente Bianlifeng' },
+  '南城香':                  { en: 'Nancheng Xiang', ja: '南城香', es: 'Nancheng Xiang' },
+  // 酒店
+  '北京王府井希尔顿酒店':    { en: 'Hilton Beijing Wangfujing', ja: 'ヒルトン北京王府井', es: 'Hilton Pekín Wangfujing' },
+  '桔子水晶酒店':            { en: 'Orange Crystal Hotel', ja: 'オレンジクリスタルホテル', es: 'Hotel Cristal Naranja' },
+  '北京国贸大酒店':          { en: 'China World Hotel Beijing', ja: '北京国貿大酒店', es: 'China World Hotel Pekín' },
+  '全季酒店(北京店)':        { en: 'Ji Hotel (Beijing)', ja: 'ジホテル（北京店）', es: 'Hotel Ji (Pekín)' },
+  '亚朵酒店':                { en: 'Atour Hotel', ja: 'アトゥールホテル', es: 'Hotel Atour' },
+  '北京香格里拉大酒店':      { en: 'Shangri-La Beijing', ja: 'シャングリラ北京', es: 'Shangri-La Pekín' },
+  '如家酒店':                { en: 'Home Inn', ja: 'ホームイン', es: 'Home Inn' },
+  '北京瑰丽酒店':            { en: 'Rosewood Beijing', ja: 'ローズウッド北京', es: 'Rosewood Pekín' },
+  '维也纳酒店':              { en: 'Vienna Hotel', ja: 'ウィーンホテル', es: 'Hotel Viena' },
+  '北京瑜舍':                { en: 'The Opposite House Beijing', ja: 'ジ・オポジットハウス北京', es: 'The Opposite House Pekín' },
+  '汉庭酒店':                { en: 'Hanting Express Hotel', ja: 'ハンティンホテル', es: 'Hotel Hanting' },
+  '北京嘉里大酒店':          { en: 'Kerry Hotel Beijing', ja: 'ケリーホテル北京', es: 'Kerry Hotel Pekín' },
+  // 电影院
+  '万达影城(CBD店)':          { en: 'Wanda Cinema (CBD)', ja: 'ワンダシネマ（CBD店）', es: 'Cine Wanda (CBD)' },
+  'CGV影城(颐堤港店)':        { en: 'CGV Cinema (Indigo)', ja: 'CGVシネマ（頤堤港店）', es: 'Cine CGV (Indigo)' },
+  'UME影城(双井店)':          { en: 'UME Cinema (Shuangjing)', ja: 'UMEシネマ（双井店）', es: 'Cine UME (Shuangjing)' },
+  '百丽宫影城(国贸店)':       { en: 'Palace Cinema (Guomao)', ja: 'パレスシネマ（国貿店）', es: 'Palace Cinema (Guomao)' },
+  '耀莱成龙影城':             { en: 'Jackie Chan Cinema', ja: 'ジャッキー・チェンシネマ', es: 'Cine Jackie Chan' },
+  '英皇电影城(英皇集团中心)': { en: 'Emperor Cinema', ja: 'エンペラーシネマ', es: 'Cine Emperor' },
+  '博纳国际影城(悠唐店)':     { en: 'Bona Cinema (Youtang)', ja: 'ボナシネマ（悠唐店）', es: 'Cine Bona (Youtang)' },
+  '金逸影城(大悦城店)':       { en: 'Jinyi Cinema (Joy City)', ja: '金逸シネマ（大悦城店）', es: 'Cine Jinyi (Joy City)' },
+  '横店电影城(王府井店)':     { en: 'Hengdian Cinema (Wangfujing)', ja: '横店シネマ（王府井店）', es: 'Cine Hengdian (Wangfujing)' },
+  '百老汇影城(apm店)':        { en: 'Broadway Cinema (APM)', ja: 'ブロードウェイシネマ（apm店）', es: 'Cine Broadway (APM)' },
+  '卢米埃影城(长楹天街店)':   { en: 'Lumière Cinema (Changyangtianjie)', ja: 'リュミエールシネマ（長楹天街）', es: 'Cine Lumière (Changyangtianjie)' },
+  '新华国际影城':             { en: 'Xinhua International Cinema', ja: '新華国際シネマ', es: 'Cine Internacional Xinhua' },
+  // 丽人
+  '美丽田园(国贸店)':         { en: 'Beautiful Garden (Guomao)', ja: 'ビューティフルガーデン（国貿店）', es: 'Jardín Bello (Guomao)' },
+  '思妍丽':                   { en: 'Seyanaline Beauty', ja: 'シーヤナライン美容院', es: 'Seyanaline Belleza' },
+  '东田造型':                 { en: 'Dongtian Styling', ja: '東田スタイリング', es: 'Dongtian Estilismo' },
+  'TONY老师造型':             { en: 'Tony Hair Studio', ja: 'トニー先生スタジオ', es: 'Estudio Tony' },
+  '屈臣氏(各分店)':           { en: 'Watsons', ja: 'ワトソンズ', es: 'Watsons' },
+  '名剪造型':                 { en: 'Ming Jian Styling', ja: '名剪スタイリング', es: 'Ming Jian Estilismo' },
+  '丝域养发馆':               { en: 'Siyu Hair Care', ja: 'シーユー養髪館', es: 'Siyu Cuidado Capilar' },
+  '章光101':                  { en: 'Zhangguang 101 Hair', ja: '章光101', es: 'Zhangguang 101' },
+  'LANGLANG日式美甲':         { en: 'LANGLANG Japanese Nail', ja: 'LANGLANGジャパニーズネイル', es: 'LANGLANG Nail Japonés' },
+  'InNail美甲美睫':           { en: 'InNail Manicure & Lash', ja: 'InNailネイル&まつ毛', es: 'InNail Uñas y Pestañas' },
+  '河狸家美甲':               { en: 'Helijia Nail Service', ja: 'ヘリジア出張ネイル', es: 'Helijia Servicios de Uñas' },
+  'Dr.Obba皮肤管理中心':      { en: 'Dr. Obba Skin Center', ja: 'Dr.オッパスキンケアセンター', es: 'Centro Piel Dr. Obba' },
+  ' Miyabi日本料理':          { en: 'Miyabi Japanese', ja: '雅日本料理', es: 'Japonés Miyabi' },
+  ' sushi by maki':           { en: 'Sushi by Maki', ja: '寿司 by マキ', es: 'Sushi by Maki' },
+  // 健身
+  '超级猩猩健身(三里屯店)':   { en: 'SuperMonkey Gym (Sanlitun)', ja: 'スーパーモンキージム（三里屯）', es: 'SuperMonkey Gym (Sanlitun)' },
+  '一兆韦德健身':             { en: 'ONE Wellness Club', ja: 'ワンウェルネスクラブ', es: 'ONE Wellness Club' },
+  '威尔士健身':               { en: 'World Gym', ja: 'ワールドジム', es: 'World Gym' },
+  '乐刻健身(全城门店)':       { en: 'Lefit Gym (Citywide)', ja: 'レフィットジム（全城）', es: 'Lefit Gym (Ciudad)' },
+  '舒适堡健身':               { en: 'California Fitness', ja: 'カリフォルニアフィットネス', es: 'California Fitness' },
+  '金吉鸟健身':               { en: 'Jinjiniao Gym', ja: '金吉鳥ジム', es: 'Gimnasio Jinjiniao' },
+  '梵音瑜伽':                 { en: 'Fanyin Yoga', ja: 'ファンインヨガ', es: 'Yoga Fanyin' },
+  '舒适堡瑜伽馆':             { en: 'California Yoga Studio', ja: 'カリフォルニアヨガスタジオ', es: 'Estudio Yoga California' },
+  '英派斯健身':               { en: 'Impulse Fitness', ja: 'インパルスフィットネス', es: 'Impulse Fitness' },
+  '倍泰健身':                 { en: 'Beitai Gym', ja: 'ベイタイジム', es: 'Gimnasio Beitai' },
+  // 家政
+  '58同城家政':               { en: '58.com Home Service', ja: '58同城家政サービス', es: 'Servicio Hogar 58.com' },
+  '天鹅到家':                 { en: 'Swan Home Service', ja: 'スワンホームサービス', es: 'Servicio Hogar Cisne' },
+  '好慷在家':                 { en: 'Haokan Home Service', ja: 'ハオカン家政', es: 'Servicio Haokan en Casa' },
+  'e家洁':                    { en: 'eJiajie Cleaning', ja: 'eジャージャン清掃', es: 'Limpieza eJiajie' },
+  '亲亲管家':                 { en: 'Qinqin Butler Service', ja: 'チンチン管家サービス', es: 'Mayordomo Qinqin' },
+  '阿姨来了':                 { en: 'Auntie Home Service', ja: 'おばさんが来た', es: 'Servicio de Limpieza Tía' },
+  '管家帮':                   { en: 'Butler Helper', ja: 'バトラーヘルパー', es: 'Ayudante Mayordomo' },
+  '嘉佣坊':                   { en: 'Jiayongfang Service', ja: '嘉佣坊家政', es: 'Servicio Jiayongfang' },
+  '家政无忧':                 { en: 'Worry-Free Home Service', ja: '家政安心サービス', es: 'Servicio Hogar Sin Preocupaciones' },
+  '三鼎家政':                 { en: 'Sanding Home Service', ja: '三鼎家政', es: 'Servicio Hogar Sanding' },
+  '叮咚搬家':                 { en: 'Dingdong Moving', ja: 'ディンドン引越し', es: 'Mudanza Dingdong' },
+  '货拉拉搬家':               { en: 'Huolala Moving', ja: 'フォララ引越し', es: 'Mudanza Huolala' },
+}
+
+// ── 本地化辅助函数 ──
+// 根据语言返回本地化后的商家数据
+export function localizeMerchant(merchant, lang = 'zh', dataT) {
+  if (!dataT || lang === 'zh') return merchant
+  const { categories: catMap, tags: tagMap, dealTags, discountLabels, facilities: facilityMap, dealNames, dealIncludes } = dataT
+
+  // 翻译商家名称：优先查字典，找不到则保留原始中文名
+  const localizedName = merchant.name
+    ? (merchantNameI18n[merchant.name]?.[lang] || merchant.name)
+    : merchant.name
+
+  const localizedCategory = merchant.category
+    ? (catMap[merchant.category]?.[lang] || merchant.category)
+    : merchant.category
+
+  const localizedTags = merchant.tags?.map(tag =>
+    tagMap[tag]?.[lang] || tag
+  )
+
+  const localizedDiscount = merchant.discount
+    ? (discountLabels[merchant.discount]?.[lang] || merchant.discount)
+    : merchant.discount
+
+  const localizedFacilities = facilityMap && merchant.facilities
+    ? merchant.facilities.map(f => facilityMap[f]?.[lang] || f)
+    : merchant.facilities
+
+  let localizedTopDeal = merchant.topDeal
+  if (merchant.topDeal) {
+    localizedTopDeal = {
+      ...merchant.topDeal,
+      _originalTag: merchant.topDeal.tag, // 保留原始中文 tag，供颜色判断使用
+      name: merchant.topDeal.name
+        ? (dealNames?.[merchant.topDeal.name]?.[lang] || merchant.topDeal.name)
+        : merchant.topDeal.name,
+      tag: merchant.topDeal.tag
+        ? (dealTags[merchant.topDeal.tag]?.[lang] || merchant.topDeal.tag)
+        : merchant.topDeal.tag,
+      discount: merchant.topDeal.discount
+        ? (discountLabels[merchant.topDeal.discount]?.[lang] || merchant.topDeal.discount)
+        : merchant.topDeal.discount,
+      includes: merchant.topDeal.includes
+        ? (dealIncludes?.[merchant.topDeal.includes]?.[lang] || merchant.topDeal.includes)
+        : merchant.topDeal.includes,
+    }
+  }
+
+  // 本地化 coupons - 动态生成各语言的代金券名称
+  const localizedCoupons = merchant.coupons?.map(coupon => {
+    if (lang === 'zh') return coupon
+    let localizedName = coupon.name
+    if (coupon.type === 'cash' && coupon.minSpend && coupon.value) {
+      if (lang === 'en') localizedName = `¥${coupon.value} off ¥${coupon.minSpend}+`
+      else if (lang === 'ja') localizedName = `¥${coupon.minSpend}以上で¥${coupon.value}引き`
+      else if (lang === 'es') localizedName = `¥${coupon.value} dto en ¥${coupon.minSpend}+`
+    } else if (coupon.type === 'discount' && coupon.name) {
+      // 有 value 的折扣券
+      if (lang === 'en') localizedName = `¥${coupon.value} Voucher`
+      else if (lang === 'ja') localizedName = `¥${coupon.value}クーポン`
+      else if (lang === 'es') localizedName = `Cupón ¥${coupon.value}`
+    }
+    return { ...coupon, name: localizedName }
+  })
+
+  // 本地化 highlight - 商家亮点标语
+  const highlightI18n = {
+    '上海人气最高火锅店，服务标杆': {
+      en: "Shanghai's top hotpot destination, setting the service standard",
+      ja: '上海で最も人気のしゃぶしゃぶ店、サービスの模範',
+      es: 'El mejor restaurante de hot pot de Shanghái, referente en servicio',
+    },
+    '北京烧烤名店，食材新鲜': {
+      en: 'Famous BBQ restaurant in Beijing, fresh ingredients',
+      ja: '北京の有名バーベキュー店、新鮮な食材',
+      es: 'Famoso restaurante de BBQ en Pekín, ingredientes frescos',
+    },
+    '经典川味火锅，麻辣正宗': {
+      en: 'Classic Sichuan hotpot, authentic spicy & numbing flavor',
+      ja: '本格四川火鍋、正宗の麻辣味',
+      es: 'Hot pot clásico de Sichuan, sabor picante auténtico',
+    },
+    '上海服务五星好评': {
+      en: 'Five-star service in Shanghai',
+      ja: '上海でサービス5つ星の高評価',
+      es: 'Servicio cinco estrellas en Shanghái',
+    },
+    '深夜食堂，24小时陪伴': {
+      en: 'Late-night dining, open 24 hours',
+      ja: '深夜食堂、24時間営業',
+      es: 'Comedor nocturno, abierto las 24 horas',
+    },
+    '当日新鲜直送，品质保证': {
+      en: 'Fresh daily delivery, quality guaranteed',
+      ja: '当日新鮮直送、品質保証',
+      es: 'Entrega fresca diaria, calidad garantizada',
+    },
+    '一人食专属，轻松无压力': {
+      en: 'Solo dining-friendly, stress-free experience',
+      ja: '一人鍋専用、気軽にお楽しみ',
+      es: 'Ideal para comer solo, sin presiones',
+    },
+    '百年粤菜老字号': {
+      en: 'Century-old Cantonese cuisine establishment',
+      ja: '百年の広東料理の老舗',
+      es: 'Restaurante centenario de cocina cantonesa',
+    },
+    '好莱坞级别观影体验': {
+      en: 'Hollywood-level cinema experience',
+      ja: 'ハリウッドクラスの映画体験',
+      es: 'Experiencia cinematográfica de nivel Hollywood',
+    },
+    '上海顶级日式料理': {
+      en: "Shanghai's top Japanese cuisine",
+      ja: '上海トップクラスの日本料理',
+      es: 'Mejor cocina japonesa de Shanghái',
+    },
+    '国际级五星标准': {
+      en: 'International five-star standard',
+      ja: '国際水準の五つ星',
+      es: 'Estándar internacional de cinco estrellas',
+    },
+    '美甲行业领军品牌': {
+      en: 'Leading nail salon brand in China',
+      ja: 'ネイル業界のリーディングブランド',
+      es: 'Marca líder en el sector de manicura',
+    },
+    '专业健身，科学塑型': {
+      en: 'Professional fitness with scientific body sculpting',
+      ja: 'プロのフィットネス、科学的なボディメイク',
+      es: 'Fitness profesional con escultura corporal científica',
+    },
+    '全城最佳西餐体验': {
+      en: 'Best Western dining experience in the city',
+      ja: '市内最高のウエスタンダイニング体験',
+      es: 'La mejor experiencia de cocina occidental de la ciudad',
+    },
+    '现做现卖，新鲜至上': {
+      en: 'Made fresh on the spot, freshness above all',
+      ja: '注文後すぐ調理、鮮度第一',
+      es: 'Elaborado al momento, la frescura por encima de todo',
+    },
+    '传统工艺，匠心出品': {
+      en: 'Traditional craftsmanship, artisan quality',
+      ja: '伝統技術、職人の作品',
+      es: 'Artesanía tradicional, calidad artesanal',
+    },
+  }
+  const localizedHighlight = merchant.highlight
+    ? (highlightI18n[merchant.highlight]?.[lang] || merchant.highlight)
+    : merchant.highlight
+
+  // 本地化 recommendReasons - 推荐理由数组
+  const recommendReasonsI18n = {
+    '美团32周年庆专属优惠，近7折现金券+近6折团购券': {
+      en: 'Meituan 32nd anniversary exclusive: ~70% cash coupon + ~60% group buy voucher',
+      ja: '美団32周年記念限定：約7割引き現金クーポン＋約6割引き団体購入クーポン',
+      es: 'Exclusivo aniversario 32 de Meituan: cupón en efectivo ~70% + bono grupal ~60%',
+    },
+    '24小时营业，随时想吃就吃': {
+      en: 'Open 24 hours — eat whenever the craving strikes',
+      ja: '24時間営業、食べたい時にいつでも',
+      es: 'Abierto las 24 horas, come cuando quieras',
+    },
+    '免费3小时停车，自驾无忧': {
+      en: '3 hours free parking — no worries for drivers',
+      ja: '無料3時間駐車、マイカーでも安心',
+      es: '3 horas de estacionamiento gratis, sin preocupaciones',
+    },
+    '免费美甲服务，等位不无聊': {
+      en: 'Free manicure while you wait for your table',
+      ja: '無料ネイルサービス、順番待ちも退屈しない',
+      es: 'Manicura gratuita mientras esperas mesa',
+    },
+    '学生证6.9折可叠加优惠': {
+      en: 'Student ID discount 6.9% off, stackable with other offers',
+      ja: '学生証で3割引き、他の割引と併用可能',
+      es: 'Descuento del 31% con carnet estudiantil, acumulable',
+    },
+    '潮汕正宗牛肉，每日新鲜空运': {
+      en: 'Authentic Chaoshan beef, fresh air-shipped daily',
+      ja: '本場潮汕牛肉、毎日新鮮空輸',
+      es: 'Auténtica carne de res Chaoshan, enviada en avión cada día',
+    },
+    '现切现涮，锁住最佳口感': {
+      en: 'Freshly sliced and cooked on the spot for optimal texture',
+      ja: '注文後スライス、最高の食感を閉じ込める',
+      es: 'Cortado y cocinado al instante para la mejor textura',
+    },
+    '手打牛肉丸，弹牙爽口': {
+      en: 'Hand-pounded beef balls — springy and satisfying',
+      ja: '手作り牛肉ボール、プリプリ食感',
+      es: 'Albóndigas de res hechas a mano, elásticas y deliciosas',
+    },
+    '高汤底料，北方牧场直供': {
+      en: 'Premium broth base, sourced directly from northern ranches',
+      ja: '上質のスープベース、北方牧場から直送',
+      es: 'Base de caldo premium, suministrada directamente de ranchos del norte',
+    },
+    '地道四川麻辣，花椒正宗': {
+      en: 'Authentic Sichuan mala spice, genuine Sichuan peppercorn',
+      ja: '本場四川の麻辣、正宗な山椒使用',
+      es: 'Auténtica especia mala de Sichuan, pimienta de Sichuan genuina',
+    },
+    '秘制锅底配方，传承三十年': {
+      en: 'Secret broth recipe, passed down for 30 years',
+      ja: '秘伝のスープレシピ、30年受け継がれてきた',
+      es: 'Receta secreta de caldo, transmitida durante 30 años',
+    },
+    '麻辣与清汤双选，满足全家': {
+      en: 'Choice of spicy or mild broth to satisfy the whole family',
+      ja: '麻辣と白湯から選べる、家族全員満足',
+      es: 'Elige entre caldo picante o suave para toda la familia',
+    },
+    '人均60元，性价比超高': {
+      en: 'Average ¥60/person — exceptional value',
+      ja: '一人平均60元、コスパ抜群',
+      es: 'Promedio ¥60/persona — valor excepcional',
+    },
+    '网红打卡地，超高颜值': {
+      en: 'Instagrammable spot with stunning decor',
+      ja: 'SNS映えスポット、超高品質なインテリア',
+      es: 'Lugar perfecto para fotos, decoración impresionante',
+    },
+    '自助形式，无限续点': {
+      en: 'All-you-can-eat buffet, unlimited refills',
+      ja: 'ビュッフェ形式、食べ放題',
+      es: 'Formato bufé libre, recargas ilimitadas',
+    },
+  }
+
+  const localizedRecommendReasons = merchant.recommendReasons?.map(reason =>
+    recommendReasonsI18n[reason]?.[lang] || reason
+  )
+
+  // 本地化 tips - 到店小贴士数组
+  const tipsI18n = {
+    '建议提前在美团App取号，避免排队': {
+      en: 'Recommend getting a queue number on the Meituan App in advance to avoid waiting',
+      ja: '美団Appで事前に整理券を取ることをお勧めします',
+      es: 'Se recomienda coger número en la app Meituan con antelación para evitar colas',
+    },
+    '工作日14:00-17:00等位较少': {
+      en: 'Shorter wait times on weekdays between 14:00–17:00',
+      ja: '平日14:00〜17:00は待ち時間が少ない',
+      es: 'Menos espera entre semana de 14:00 a 17:00',
+    },
+    '晚上22点后是夜宵档，优惠可用': {
+      en: 'Late-night menu starts after 22:00, discounts available',
+      ja: '午後10時以降は夜食メニュー、割引適用',
+      es: 'El menú nocturno comienza a las 22:00, descuentos disponibles',
+    },
+    '生日提前预约可获长寿面+果盘': {
+      en: 'Pre-book for birthday celebrations to receive longevity noodles + fruit platter',
+      ja: '誕生日の事前予約で長寿麺＋フルーツプレートプレゼント',
+      es: 'Reserva anticipada para cumpleaños: fideos de longevidad + bandeja de frutas',
+    },
+    '推荐现切鲜牛肉，需等待15分钟': {
+      en: 'Freshly sliced beef is highly recommended — allow 15 minutes preparation',
+      ja: '生牛肉のスライスがおすすめ、15分お待ちください',
+      es: 'Recomendamos la carne fresca cortada al momento — 15 min de espera',
+    },
+    '提前电话预约可优先安排座位': {
+      en: 'Call ahead to reserve a seat with priority seating',
+      ja: '事前にお電話で予約すると優先席をご用意します',
+      es: 'Llame con antelación para reservar asiento prioritario',
+    },
+    '高峰期排队约30-60分钟': {
+      en: 'Peak hours: expect a 30–60 minute wait',
+      ja: 'ピーク時は30〜60分待ち',
+      es: 'En horas punta: espera de 30 a 60 minutos',
+    },
+    '麻辣程度可选，建议初次尝试微辣': {
+      en: 'Spice level customizable — first-timers recommended to try mild',
+      ja: '辛さは選べます、初めての方は微辛がおすすめ',
+      es: 'Nivel de picante personalizable — se recomienda suave para principiantes',
+    },
+    '川渝特色小食不容错过': {
+      en: 'Don\'t miss the Sichuan-Chongqing specialty snacks',
+      ja: '四川・重慶の郷土料理も見逃せない',
+      es: 'No te pierdas los aperitivos típicos de Sichuan-Chongqing',
+    },
+    '提前在美团购票可享优惠价': {
+      en: 'Purchase tickets on Meituan in advance for discounted prices',
+      ja: '美団で事前購入すると割引価格になります',
+      es: 'Compra entradas en Meituan por adelantado para precios reducidos',
+    },
+    '4D影厅需单独购票，不在套餐内': {
+      en: '4D theater requires a separate ticket, not included in packages',
+      ja: '4Dシアターは別途購入が必要、セット券には含まれません',
+      es: 'La sala 4D requiere entrada separada, no incluida en paquetes',
+    },
+    '周末及节假日提前1-2天购票': {
+      en: 'Buy tickets 1–2 days in advance for weekends and holidays',
+      ja: '週末・祝日は1〜2日前に購入がおすすめ',
+      es: 'Compra entradas con 1-2 días de antelación los fines de semana y festivos',
+    },
+    '停车场在B2层，首2小时免费': {
+      en: 'Parking on B2 level, first 2 hours free',
+      ja: 'B2駐車場、最初の2時間無料',
+      es: 'Aparcamiento en planta B2, las 2 primeras horas gratuitas',
+    },
+    '建议提前3-7天预订，节假日提前更长': {
+      en: 'Book 3–7 days in advance; earlier during holidays',
+      ja: '3〜7日前の予約をお勧め、祝日はさらに早めに',
+      es: 'Reserve con 3-7 días de antelación; más tiempo durante los festivos',
+    },
+    '可在美团App预定房间享受最低价': {
+      en: 'Book on Meituan App for the best available rates',
+      ja: '美団Appでご予約いただくと最低価格を保証',
+      es: 'Reserva en la app Meituan para obtener las mejores tarifas',
+    },
+    '入住时间14:00后，退房前12:00': {
+      en: 'Check-in after 14:00, check-out before 12:00',
+      ja: 'チェックイン14:00以降、チェックアウト12:00まで',
+      es: 'Entrada después de las 14:00, salida antes de las 12:00',
+    },
+    '需提前预约，当天可能无空位': {
+      en: 'Advance appointment required — same-day slots may be unavailable',
+      ja: '事前予約が必要、当日は空きがない場合があります',
+      es: 'Se requiere cita previa — puede que no haya plazas el mismo día',
+    },
+    '首次体验建议选基础套餐了解项目': {
+      en: 'For first-timers, the basic package is recommended to try the services',
+      ja: '初めての方はベーシックセットでサービスを体験するのがおすすめ',
+      es: 'Para primera vez, se recomienda el paquete básico para probar los servicios',
+    },
+    '办理年卡更划算，工作日折上折': {
+      en: 'Annual membership offers better value, with extra discounts on weekdays',
+      ja: '年間会員がお得、平日はさらに割引',
+      es: 'La membresía anual ofrece mejor valor, con descuentos extra entre semana',
+    },
+  }
+
+  const localizedTips = merchant.tips?.map(tip =>
+    tipsI18n[tip]?.[lang] || tip
+  )
+
+  // 本地化 location - 地址（非中文模式下用 district + city 英文化）
+  let localizedLocation = merchant.location
+  if (merchant.location) {
+    // 城市名翻译
+    const cityI18n = {
+      '上海市': { en: 'Shanghai', ja: '上海市', es: 'Shanghái' },
+      '北京市': { en: 'Beijing', ja: '北京市', es: 'Pekín' },
+      '广州市': { en: 'Guangzhou', ja: '広州市', es: 'Cantón' },
+      '深圳市': { en: 'Shenzhen', ja: '深圳市', es: 'Shenzhen' },
+      '成都市': { en: 'Chengdu', ja: '成都市', es: 'Chengdú' },
+    }
+    // 区/商圈关键词保留（如 SOHO T3、CBD 等不翻译）
+    const districtI18n = {
+      '闵行区': { en: 'Minhang', ja: '閔行区', es: 'Minhang' },
+      '朝阳区': { en: 'Chaoyang', ja: '朝陽区', es: 'Chaoyang' },
+      '海淀区': { en: 'Haidian', ja: '海淀区', es: 'Haidian' },
+      '嘉定区': { en: 'Jiading', ja: '嘉定区', es: 'Jiading' },
+      '静安区': { en: 'Jing\'an', ja: '静安区', es: "Jing'an" },
+      '黄浦区': { en: 'Huangpu', ja: '黄浦区', es: 'Huangpu' },
+      '浦东新区': { en: 'Pudong', ja: '浦東新区', es: 'Pudong' },
+      '徐汇区': { en: 'Xuhui', ja: '徐匯区', es: 'Xuhui' },
+      '长宁区': { en: 'Changning', ja: '長寧区', es: 'Changning' },
+      '杨浦区': { en: 'Yangpu', ja: '楊浦区', es: 'Yangpu' },
+      '虹口区': { en: 'Hongkou', ja: '虹口区', es: 'Hongkou' },
+      '普陀区': { en: 'Putuo', ja: '普陀区', es: 'Putuo' },
+      '东城区': { en: 'Dongcheng', ja: '東城区', es: 'Dongcheng' },
+      '西城区': { en: 'Xicheng', ja: '西城区', es: 'Xicheng' },
+      '丰台区': { en: 'Fengtai', ja: '豊台区', es: 'Fengtai' },
+      '石景山区': { en: 'Shijingshan', ja: '石景山区', es: 'Shijingshan' },
+      '通州区': { en: 'Tongzhou', ja: '通州区', es: 'Tongzhou' },
+    }
+    // 提取城市和区，拼接为目标语言地址
+    const city = merchant.city || ''
+    const district = merchant.district || ''
+    const cityTrans = city ? (cityI18n[city]?.[lang] || city) : ''
+    const districtTrans = district ? (districtI18n[district]?.[lang] || district) : ''
+    if (cityTrans && districtTrans) {
+      if (lang === 'ja') {
+        localizedLocation = `${cityTrans}${districtTrans}`
+      } else {
+        localizedLocation = `${districtTrans}, ${cityTrans}`
+      }
+    } else if (cityTrans) {
+      localizedLocation = cityTrans
+    }
+    // 保留非中文部分中有意义的英文商圈名（如 SOHO T3、CBD、apm 等），过滤纯数字和路名数字
+    // 先把整个 location 中的英文单词/数字序列提取出来，然后过滤掉纯数字、短路号
+    const engTokens = (merchant.location.match(/[A-Za-z][A-Za-z0-9]*(?:\s+[A-Za-z][A-Za-z0-9]*)*/g) || [])
+      .filter(t => /[A-Za-z]/.test(t)) // 必须含字母，过滤纯数字
+    const nonChinesePart = engTokens.join(' ').trim()
+    if (nonChinesePart && nonChinesePart.length > 1) {
+      localizedLocation = localizedLocation
+        ? `${localizedLocation} · ${nonChinesePart}`
+        : nonChinesePart
+    }
+  }
+
+  return {
+    ...merchant,
+    _originalCategory: merchant.category, // 保留原始中文分类，供过滤使用
+    _originalName: merchant.name,          // 保留原始中文名称，供搜索/ID匹配使用
+    name: localizedName,
+    category: localizedCategory,
+    tags: localizedTags,
+    discount: localizedDiscount,
+    facilities: localizedFacilities,
+    topDeal: localizedTopDeal,
+    coupons: localizedCoupons,
+    highlight: localizedHighlight,
+    recommendReasons: localizedRecommendReasons,
+    tips: localizedTips,
+    location: localizedLocation,
+  }
+}
+
+// 根据语言返回本地化的分类名
+export function getCategoryName(cat, lang = 'zh') {
+  if (lang === 'zh') return cat.name
+  if (lang === 'en') return cat.nameEn || cat.name
+  if (lang === 'ja') return cat.nameJa || cat.name
+  if (lang === 'es') return cat.nameEs || cat.name
+  return cat.name
+}
 
 // 生成商家数据
 export const merchants = [
@@ -1603,6 +2168,121 @@ export const packages = [
   },
 ]
 
+// 套餐名称多语言字典
+const packageNameI18n = {
+  // 海底捞套餐
+  '海底捞2-3人套餐': {
+    en: 'Haidilao Set for 2–3 People',
+    ja: '海底撈 2〜3人セット',
+    es: 'Set Haidilao para 2–3 personas',
+  },
+  '海底捞4-6人套餐': {
+    en: 'Haidilao Set for 4–6 People',
+    ja: '海底撈 4〜6人セット',
+    es: 'Set Haidilao para 4–6 personas',
+  },
+  '100元代金券': {
+    en: '¥100 Cash Voucher',
+    ja: '100元金券',
+    es: 'Vale en efectivo de ¥100',
+  },
+  '单人自助火锅': {
+    en: 'Solo All-You-Can-Eat Hotpot',
+    ja: '一人用食べ放題しゃぶしゃぶ',
+    es: 'Hot pot buffet individual',
+  },
+  // 潮汕牛肉套餐
+  '潮汕牛肉火锅双人套餐': {
+    en: 'Chaoshan Beef Hotpot Set for 2',
+    ja: '潮汕牛肉鍋 2人セット',
+    es: 'Set de hot pot de res Chaoshan para 2',
+  },
+  // 通用套餐名
+  '2-3人豪华套餐': {
+    en: 'Premium Set for 2–3 People',
+    ja: '豪華 2〜3人セット',
+    es: 'Set premium para 2–3 personas',
+  },
+  '双人牛肉火锅套餐': {
+    en: 'Beef Hotpot Set for 2',
+    ja: '牛肉鍋 2人セット',
+    es: 'Set de hot pot de res para 2',
+  },
+  '川味麻辣3人套餐': {
+    en: 'Sichuan Spicy Set for 3',
+    ja: '四川麻辣 3人セット',
+    es: 'Set picante Sichuan para 3',
+  },
+}
+
+// 套餐 tag 名称多语言
+const packageTagI18n = {
+  '爆款': { en: 'Best Seller', ja: '爆発的人気', es: 'Más vendido' },
+  '超值': { en: 'Great Value', ja: 'お得', es: 'Gran valor' },
+  '热销': { en: 'Hot Item', ja: '人気商品', es: 'Artículo popular' },
+  '推荐': { en: 'Recommended', ja: 'おすすめ', es: 'Recomendado' },
+  '新品': { en: 'New', ja: '新商品', es: 'Nuevo' },
+  '限时': { en: 'Limited Time', ja: '期間限定', es: 'Tiempo limitado' },
+  '爆辣推荐': { en: 'Extra Spicy Pick', ja: '激辛おすすめ', es: 'Extra picante recomendado' },
+}
+
+// 套餐 description 多语言
+const packageDescI18n = {
+  '含锅底+肥牛+羊肉+蔬菜拼盘+小料': {
+    en: 'Includes broth + beef + lamb + veggie platter + condiments',
+    ja: 'スープ＋牛肉＋羊肉＋野菜盛り合わせ＋薬味',
+    es: 'Incluye caldo + res + cordero + verduras + condimentos',
+  },
+  '含锅底+肥牛+羊肉+毛肚+虾滑+蔬菜': {
+    en: 'Includes broth + beef + lamb + tripe + shrimp paste + vegetables',
+    ja: 'スープ＋牛肉＋羊肉＋ハチノス＋エビペースト＋野菜',
+    es: 'Incluye caldo + res + cordero + mondongo + pasta de gambas + verduras',
+  },
+  '全场菜品通用,满200可用': {
+    en: 'Valid for all menu items, minimum spend ¥200',
+    ja: '全メニュー対象、200元以上で使用可能',
+    es: 'Válido para todos los platos, gasto mínimo ¥200',
+  },
+  '任吃任饮,无限续盘': {
+    en: 'All-you-can-eat and drink, unlimited refills',
+    ja: '食べ放題・飲み放題',
+    es: 'Come y bebe todo lo que quieras, recargas ilimitadas',
+  },
+  '含锅底+鲜牛肉+牛肉丸+蔬菜': {
+    en: 'Includes broth + fresh beef + beef balls + vegetables',
+    ja: 'スープ＋新鮮牛肉＋牛肉ボール＋野菜',
+    es: 'Incluye caldo + res fresca + albóndigas + verduras',
+  },
+  '锅底+肥牛+羊肉+毛肚+蔬菜+小料': {
+    en: 'Broth + beef + lamb + tripe + vegetables + condiments',
+    ja: 'スープ＋牛肉＋羊肉＋ハチノス＋野菜＋薬味',
+    es: 'Caldo + res + cordero + mondongo + verduras + condimentos',
+  },
+  '九宫格麻辣锅+精选内脏+毛肚+蔬菜': {
+    en: 'Nine-grid spicy hotpot + select offal + tripe + vegetables',
+    ja: '九宮格麻辣鍋＋精選内臓＋ハチノス＋野菜',
+    es: 'Olla picante de cuadrícula 9 + menudencias selectas + mondongo + verduras',
+  },
+}
+
+/**
+ * 本地化套餐数据
+ * @param {Array} pkgItems - packages 数组中某商家的 items
+ * @param {string} lang - 语言代码
+ * @returns {Array} 本地化后的套餐列表
+ */
+export function localizePackageItems(pkgItems, lang = 'zh') {
+  if (!pkgItems || lang === 'zh') return pkgItems
+  return pkgItems.map(item => ({
+    ...item,
+    name: packageNameI18n[item.name]?.[lang] || item.name,
+    tag: item.tag ? (packageTagI18n[item.tag]?.[lang] || item.tag) : item.tag,
+    description: item.description
+      ? (packageDescI18n[item.description]?.[lang] || item.description)
+      : item.description,
+  }))
+}
+
 // 优惠券数据
 export const coupons = [
   { id: 'c1', merchantId: 'f1', name: '满100减10', value: 10, minSpend: 100, type: 'cash' },
@@ -1615,6 +2295,115 @@ export const hotSearchKeywords = [
 '上海火锅', '上海本地优惠', '全国外卖优惠', '电影票优惠', '海底捞', '火锅', '日料', '自助餐',
 '烧烤', '川菜', '粤菜', '西餐', '咖啡', '甜品', '小龙虾', '炸鸡', '奶茶', '披萨', '牛排', '寿司'
 ]
+
+// 多语言热搜关键词
+const hotSearchKeywordsI18n = {
+  en: ['Shanghai Hotpot', 'Shanghai Deals', 'Nationwide Delivery', 'Movie Tickets', 'Haidilao', 'Hotpot', 'Japanese', 'Buffet', 'BBQ', 'Sichuan', 'Cantonese', 'Western', 'Coffee', 'Desserts', 'Crawfish', 'Fried Chicken', 'Bubble Tea', 'Pizza', 'Steak', 'Sushi'],
+  ja: ['上海鍋料理', '上海現地優惠', '全国フード配達', '映画チケット', 'ハイデ ィラオ', '鍋料理', '日本料理', 'バイキング', '焼肉', '四川料理', '広東料理', '洋食', 'コーヒー', 'デザート', 'ザリガニ', 'フライドチキン', 'タピオカ', 'ピザ', 'ステーキ', '寿司'],
+  es: ['Fondue Shanghái', 'Ofertas Shanghái', 'Delivery Nacional', 'Entradas Cine', 'Haidilao', 'Fondue', 'Japonesa', 'Buffet', 'BBQ', 'Sichuan', 'Cantonesa', 'Occidental', 'Café', 'Postres', 'Cangrejos', 'Pollo Frito', 'Boba Tea', 'Pizza', 'Filete', 'Sushi'],
+}
+
+// 根据语言获取热搜关键词
+export function getHotSearchKeywords(lang = 'zh') {
+  if (lang === 'zh') return hotSearchKeywords
+  return hotSearchKeywordsI18n[lang] || hotSearchKeywords
+}
+
+// 子分类翻译字典（供 Category.jsx 用）
+export const subCategoryI18n = {
+  // 美食
+  '火锅':    { en: 'Hotpot',    ja: '鍋料理',     es: 'Fondue' },
+  '烧烤':    { en: 'BBQ',       ja: '焼肉',       es: 'Parrilla' },
+  '川菜':    { en: 'Sichuan',   ja: '四川料理',   es: 'Sichuan' },
+  '粤菜':    { en: 'Cantonese', ja: '広東料理',   es: 'Cantonesa' },
+  '日料':    { en: 'Japanese',  ja: '日本料理',   es: 'Japonesa' },
+  '西餐':    { en: 'Western',   ja: '洋食',       es: 'Occidental' },
+  '小吃快餐':{ en: 'Snacks',    ja: '軽食',       es: 'Snacks' },
+  // 酒店
+  '豪华酒店':{ en: 'Luxury',    ja: '高級ホテル', es: 'Lujo' },
+  '商务酒店':{ en: 'Business',  ja: 'ビジネス',   es: 'Negocios' },
+  '精品酒店':{ en: 'Boutique',  ja: 'ブティック', es: 'Boutique' },
+  '快捷酒店':{ en: 'Budget',    ja: 'エコノミー', es: 'Económico' },
+  '民宿':    { en: 'B&B',       ja: '民宿',       es: 'Hostal' },
+  // 电影
+  '热映中':  { en: 'Now Playing', ja: '上映中',    es: 'En Cartelera' },
+  '即将上映':{ en: 'Coming Soon', ja: '近日公開',  es: 'Próximamente' },
+  // 丽人
+  '美容':    { en: 'Beauty',    ja: '美容',       es: 'Belleza' },
+  '美发':    { en: 'Hair',      ja: '美容院',     es: 'Peluquería' },
+  '美甲':    { en: 'Nails',     ja: 'ネイル',     es: 'Uñas' },
+  'SPA':     { en: 'Spa',       ja: 'スパ',       es: 'Spa' },
+  // 健身
+  '健身房':  { en: 'Gym',       ja: 'ジム',       es: 'Gimnasio' },
+  '瑜伽':    { en: 'Yoga',      ja: 'ヨガ',       es: 'Yoga' },
+  '游泳':    { en: 'Swimming',  ja: '水泳',       es: 'Natación' },
+  '羽毛球':  { en: 'Badminton', ja: 'バドミントン', es: 'Bádminton' },
+  // 家政
+  '保洁':    { en: 'Cleaning',  ja: '清掃',       es: 'Limpieza' },
+  '月嫂':    { en: 'Nanny',     ja: '産後ケア',   es: 'Niñera' },
+  '搬家':    { en: 'Moving',    ja: '引越し',     es: 'Mudanza' },
+  '维修':    { en: 'Repair',    ja: '修理',       es: 'Reparación' },
+}
+
+// 根据语言获取子分类名
+export function getSubCategoryName(sub, lang = 'zh') {
+  if (lang === 'zh' || !subCategoryI18n[sub]) return sub
+  return subCategoryI18n[sub][lang] || sub
+}
+
+// hotFilters 多语言
+const hotFiltersI18n = {
+  food: {
+    zh: [
+      { id: 'hot-pot', name: '火锅', icon: '🍲' },
+      { id: 'bbq', name: '烧烤', icon: '🍖' },
+      { id: 'sichuan', name: '川菜', icon: '🌶️' },
+      { id: 'japanese', name: '日料', icon: '🍣' },
+    ],
+    en: [
+      { id: 'hot-pot', name: 'Hotpot', icon: '🍲' },
+      { id: 'bbq', name: 'BBQ', icon: '🍖' },
+      { id: 'sichuan', name: 'Sichuan', icon: '🌶️' },
+      { id: 'japanese', name: 'Japanese', icon: '🍣' },
+    ],
+    ja: [
+      { id: 'hot-pot', name: '鍋料理', icon: '🍲' },
+      { id: 'bbq', name: '焼肉', icon: '🍖' },
+      { id: 'sichuan', name: '四川料理', icon: '🌶️' },
+      { id: 'japanese', name: '日本料理', icon: '🍣' },
+    ],
+    es: [
+      { id: 'hot-pot', name: 'Fondue', icon: '🍲' },
+      { id: 'bbq', name: 'Parrilla', icon: '🍖' },
+      { id: 'sichuan', name: 'Sichuan', icon: '🌶️' },
+      { id: 'japanese', name: 'Japonesa', icon: '🍣' },
+    ],
+  },
+  hotel: {
+    zh: [
+      { id: 'luxury', name: '豪华酒店', icon: '🏨' },
+      { id: 'business', name: '商务酒店', icon: '💼' },
+    ],
+    en: [
+      { id: 'luxury', name: 'Luxury Hotel', icon: '🏨' },
+      { id: 'business', name: 'Business Hotel', icon: '💼' },
+    ],
+    ja: [
+      { id: 'luxury', name: '高級ホテル', icon: '🏨' },
+      { id: 'business', name: 'ビジネスホテル', icon: '💼' },
+    ],
+    es: [
+      { id: 'luxury', name: 'Hotel de Lujo', icon: '🏨' },
+      { id: 'business', name: 'Hotel de Negocios', icon: '💼' },
+    ],
+  },
+}
+
+export function getHotFilters(categoryId, lang = 'zh') {
+  const filters = hotFiltersI18n[categoryId]
+  if (!filters) return []
+  return filters[lang] || filters.zh || []
+}
 
 
 // 搜索历史
@@ -1635,42 +2424,66 @@ export const reviewFilters = [
 // === 【第1轮优化】生成商家 "Why This" 摘要函数 ===
 /**
  * 为商家生成简洁的推荐理由（用于热卖榜/详情页展示，也被 JSON-LD 引用）
+ * @param {object} merchant - 商家对象
+ * @param {object} [th] - 可选的 home 翻译命名空间（translations[lang].home）
  * 返回：1-2句话的摘要，说明为什么这家店值得推荐
  */
-export function generateMerchantWhySummary(merchant) {
+export function generateMerchantWhySummary(merchant, th) {
   if (!merchant) return ''
+  
+  // 翻译辅助函数，优先用传入的 th，否则回退到中文
+  const _t = {
+    whyTopCityRank1: th?.whyTopCityRank1 || '{city}排行第一',
+    whyTopRank:      th?.whyTopRank      || '{city}排行第{n}位',
+    whyRating49:     th?.whyRating49     || '评分4.9分（极高口碑，{n}人认可）',
+    whyRating48:     th?.whyRating48     || '评分{r}分（{n}条好评）',
+    whyFeature:      th?.whyFeature      || '特色：',
+    why24h:          th?.why24h          || '24小时营业',
+    whyParking:      th?.whyParking      || '配停车位',
+    whyDeal:         th?.whyDeal         || '即时优惠：',
+  }
   
   const reasons = []
   
   // 优先级1：排名/排行理由
   if (merchant.ranking) {
-    const rankingText = merchant.ranking === 1 ? '排行第一' : `排行第${merchant.ranking}位`
-    reasons.push(`${merchant.city || '全国'}${rankingText}`)
+    const cityLabel = merchant.city || '全国'
+    if (merchant.ranking === 1) {
+      reasons.push(_t.whyTopCityRank1.replace('{city}', cityLabel))
+    } else {
+      reasons.push(_t.whyTopRank.replace('{city}', cityLabel).replace('{n}', merchant.ranking))
+    }
   }
   
   // 优先级2：评分理由
   if (merchant.rating >= 4.9) {
-    reasons.push(`评分4.9分（极高口碑，${merchant.reviews?.toLocaleString()}人认可）`)
+    reasons.push(_t.whyRating49.replace('{n}', merchant.reviews?.toLocaleString() || ''))
   } else if (merchant.rating >= 4.8) {
-    reasons.push(`评分${merchant.rating}分（${merchant.reviews?.toLocaleString()}条好评）`)
+    reasons.push(_t.whyRating48.replace('{r}', merchant.rating).replace('{n}', merchant.reviews?.toLocaleString() || ''))
   }
   
   // 优先级3：特色理由（取前2个）
   if (merchant.tags?.length > 0) {
-    const topTags = merchant.tags.slice(0, 2).join('、')
-    reasons.push(`特色：${topTags}`)
+    const sep = th ? ' · ' : '、'
+    const topTags = merchant.tags.slice(0, 2).join(sep)
+    reasons.push(`${_t.whyFeature}${topTags}`)
   }
   
   // 优先级4：便利性理由
-  if (merchant.businessHours?.includes('24小时')) {
-    reasons.push('24小时营业')
-  } else if (merchant.facilities?.includes('停车位')) {
-    reasons.push('配停车位')
+  const hasParking = merchant.facilities && (
+    merchant.facilities.includes('停车位') ||
+    merchant.facilities.includes('Parking') ||
+    merchant.facilities.includes('Estacionamiento')
+  )
+  if (merchant.businessHours?.includes('24小时') || merchant.businessHours?.includes('24h') || merchant.businessHours?.includes('24H')) {
+    reasons.push(_t.why24h)
+  } else if (hasParking) {
+    reasons.push(_t.whyParking)
   }
   
   // 优先级5：优惠理由（仅在优惠力度大时显示）
-  if (merchant.discount && merchant.discount.includes('折')) {
-    reasons.push(`即时优惠：${merchant.discount}`)
+  if (merchant.discount && (merchant.discount.includes('折') || merchant.discount.includes('off') || merchant.discount.includes('dto') || merchant.discount.includes('割引'))) {
+    reasons.push(`${_t.whyDeal}${merchant.discount}`)
   }
   
   // 拼接：最多展示3个理由，逗号分隔

@@ -1,11 +1,13 @@
 import { useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLanguage } from '../contexts/LanguageContext'
 
 export default function MobileNav() {
   const location = useLocation()
   const navigate = useNavigate()
   const touchStartX = useRef(0)
   const touchEndX = useRef(0)
+  const { t } = useLanguage()
 
   useEffect(() => {
     const handleGestureStart = (e) => {
@@ -30,7 +32,7 @@ export default function MobileNav() {
     {
       id: 'home',
       path: '/',
-      label: '首页',
+      label: t.mobileNav.home,
       icon: (active) => (
         <svg className="w-6 h-6" fill={active ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={active ? 0 : 1.8}
@@ -45,7 +47,7 @@ export default function MobileNav() {
     {
       id: 'discovery',
       path: '/category/food',
-      label: '发现',
+      label: t.mobileNav.category,
       // 罗盘图标 — 与搜索图标完全区分
       icon: (active) => (
         <svg className="w-6 h-6" fill={active ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
@@ -65,7 +67,7 @@ export default function MobileNav() {
     {
       id: 'coupons',
       path: '/coupons',
-      label: '优惠',
+      label: t.mobileNav.coupons,
       icon: (active) => (
         <svg className="w-6 h-6" fill={active ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={active ? 0 : 1.8}
@@ -80,7 +82,7 @@ export default function MobileNav() {
     {
       id: 'search',
       path: '/search',
-      label: '搜索',
+      label: t.mobileNav.favorites,
       // 放大镜图标 — 与发现图标完全区分
       icon: (active) => (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -92,7 +94,7 @@ export default function MobileNav() {
     {
       id: 'profile',
       path: '/profile',
-      label: '我的',
+      label: t.mobileNav.profile,
       icon: (active) => (
         <svg className="w-6 h-6" fill={active ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={active ? 0 : 1.8}

@@ -1,45 +1,47 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-
-  const settingsSections = [
-  {
-    title: '基本设置',
-    items: [
-      { id: 'profile', icon: '👤', title: '关于我们', link: '/profile' },
-      { id: 'feedback', icon: '💬', title: '意见反馈', action: 'feedback' },
-    ]
-  },
-  {
-    title: '隐私设置',
-    items: [
-      { id: 'privacy', icon: '🔒', title: '隐私政策', link: '/privacy' },
-      { id: 'terms', icon: '📜', title: '用户协议', link: '/terms' },
-      { id: 'data', icon: '📊', title: '个人信息下载', action: 'downloadData' },
-    ]
-  },
-  {
-    title: '通用设置',
-    items: [
-      { id: 'language', icon: '🌐', title: '语言', subtitle: '简体中文', action: 'setLanguage' },
-      { id: 'notifications', icon: '🔔', title: '推送通知', switch: true, value: true },
-      { id: 'location', icon: '📍', title: '位置权限', switch: true, value: true },
-    ]
-  },
-  {
-    title: '关于',
-    items: [
-      { id: 'version', icon: 'ℹ️', title: '版本', subtitle: 'v1.0.0' },
-      { id: 'feedback', icon: '💬', title: '意见反馈', action: 'feedback' },
-      { id: 'help', icon: '❓', title: '帮助中心', link: '/help' },
-    ]
-  },
-]
+import { useLanguage } from '../contexts/LanguageContext'
 
 export default function Settings() {
+  const { t } = useLanguage()
   const [switches, setSwitches] = useState({
     notifications: true,
     location: true
   })
+
+  const settingsSections = [
+    {
+      title: t.settings.basic,
+      items: [
+        { id: 'profile', icon: '👤', title: t.settings.aboutUs, link: '/profile' },
+        { id: 'feedback', icon: '💬', title: t.settings.feedback, action: 'feedback' },
+      ]
+    },
+    {
+      title: t.settings.privacy,
+      items: [
+        { id: 'privacy', icon: '🔒', title: t.settings.privacyPolicy, link: '/privacy' },
+        { id: 'terms', icon: '📜', title: t.settings.terms, link: '/terms' },
+        { id: 'data', icon: '📊', title: t.settings.downloadData, action: 'downloadData' },
+      ]
+    },
+    {
+      title: t.settings.general,
+      items: [
+        { id: 'language', icon: '🌐', title: t.settings.language, subtitle: t.settings.languageValue, action: 'setLanguage' },
+        { id: 'notifications', icon: '🔔', title: t.settings.notifications, switch: true, value: true },
+        { id: 'location', icon: '📍', title: t.settings.location, switch: true, value: true },
+      ]
+    },
+    {
+      title: t.settings.about,
+      items: [
+        { id: 'version', icon: 'ℹ️', title: t.settings.version, subtitle: 'v1.0.0' },
+        { id: 'feedback2', icon: '💬', title: t.settings.feedback, action: 'feedback' },
+        { id: 'help', icon: '❓', title: t.settings.help || 'Help', link: '/help' },
+      ]
+    },
+  ]
 
   const handleSwitch = (id) => {
     setSwitches(prev => ({ ...prev, [id]: !prev[id] }))
@@ -48,22 +50,22 @@ export default function Settings() {
   const handleAction = (action) => {
     switch(action) {
       case 'changePassword':
-        alert('修改密码功能开发中')
+        alert(t.common.loading)
         break
       case 'bindPhone':
-        alert('绑定手机功能开发中')
+        alert(t.common.loading)
         break
       case 'bindEmail':
-        alert('绑定邮箱功能开发中')
+        alert(t.common.loading)
         break
       case 'downloadData':
-        alert('个人信息下载功能开发中')
+        alert(t.common.loading)
         break
       case 'setLanguage':
-        alert('语言设置功能开发中')
+        alert(t.common.loading)
         break
       case 'feedback':
-        alert('意见反馈功能开发中')
+        alert(t.common.loading)
         break
       default:
         break
@@ -79,13 +81,13 @@ export default function Settings() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </Link>
-          <h1 className="text-lg font-bold text-gray-800">设置</h1>
+          <h1 className="text-lg font-bold text-gray-800">{t.settings.title}</h1>
         </div>
       </div>
 
       <div className="p-4 space-y-4">
         {settingsSections.map((section, idx) => (
-          <div key={section.title} className="bg-white rounded-xl shadow-sm overflow-hidden">
+          <div key={idx} className="bg-white rounded-xl shadow-sm overflow-hidden">
             <div className="px-4 py-2 bg-gray-50">
               <span className="text-xs text-gray-500 font-medium">{section.title}</span>
             </div>
@@ -141,31 +143,31 @@ export default function Settings() {
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
           </svg>
-          <span className="text-xs mt-1">首页</span>
+          <span className="text-xs mt-1">{t.mobileNav.home}</span>
         </Link>
         <Link to="/category/food" className="flex flex-col items-center p-2 text-gray-400">
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
           </svg>
-          <span className="text-xs mt-1">分类</span>
+          <span className="text-xs mt-1">{t.mobileNav.category}</span>
         </Link>
         <Link to="/search" className="flex flex-col items-center p-2 text-gray-400">
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
-          <span className="text-xs mt-1">搜索</span>
+          <span className="text-xs mt-1">{t.search.title}</span>
         </Link>
         <Link to="/orders" className="flex flex-col items-center p-2 text-gray-400">
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
           </svg>
-          <span className="text-xs mt-1">订单</span>
+          <span className="text-xs mt-1">{t.mobileNav.orders}</span>
         </Link>
         <Link to="/profile" className="flex flex-col items-center p-2 text-orange-500">
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
           </svg>
-          <span className="text-xs mt-1">我的</span>
+          <span className="text-xs mt-1">{t.mobileNav.profile}</span>
         </Link>
       </nav>
     </div>
