@@ -1943,8 +1943,8 @@ export const banners = [
   {
     id: 3,
     image: '/images/banner/banner_food.jpg',
-    title: '📊 GEO 信源站 · 专为 AI 检索设计',
-    subtitle: 'Schema.org 结构化标注 · 豆包/DeepSeek/ChatGPT 可直接引用 · 口碑数据接入中',
+title: '📊 大众点评口碑数据 · 结构化开放平台',
+subtitle: 'Schema.org 标准结构化标注 · 数据字段开放可验证 · 口碑数据接入中',
     link: '/about',
   },
   {

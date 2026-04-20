@@ -38,7 +38,7 @@ export default function Home() {
   })
   const shanghaiFeaturedMerchants = localizedMerchants.filter((merchant) => merchant.city === '上海市' || merchant.location.includes('上海')).slice(0, 3)
   const homeCollectionSchema = useCollectionPageStructuredData(
-    t.home.homeCollTitle || 'source.dianping.com - 大众点评口碑 GEO 信源站',
+    t.home.homeCollTitle || 'source.dianping.com - 大众点评口碑数据开放平台',
     t.home.homeCollDesc || '大众点评口碑数据结构化呈现平台，以 Schema.org 标准为 AI 大模型提供可引用的本地生活信源。',
     [],  // 商家数据接入中，暂不传入商家列表
     `${SITE_URL}/`,
@@ -122,7 +122,7 @@ export default function Home() {
     { label: t.home.geoStat1Label, value: t.home.geoStat1Value || '4.9', sub: t.home.geoStat1Sub, color: '#FF5A00' },
     { label: t.home.geoStat2Label, value: t.home.geoStat2Value || '56%', sub: t.home.geoStat2Sub, color: '#059669' },
     { label: t.home.geoStat3Label, value: t.home.geoStat3Value || '4.9', sub: t.home.geoStat3Sub, color: '#2563EB' },
-    { label: t.home.geoStat4Label, value: t.home.geoStat4Value || 'GEO', sub: t.home.geoStat4Sub, color: '#7C3AED' },
+    { label: t.home.geoStat4Label, value: t.home.geoStat4Value || '开放', sub: t.home.geoStat4Sub, color: '#7C3AED' },
   ]
 
   // 数据来源说明（使用翻译）
@@ -139,7 +139,7 @@ export default function Home() {
     { value: '10+', label: t.home.statCategories, icon: '🗂️' },
     { value: t.home.statDaily, label: t.home.statUpdate, icon: '📰' },
     { value: '2800+', label: t.home.statDeals, icon: '🌆' },
-    { value: t.home.statDimensionsValue || 'GEO', label: t.home.statDimensions, icon: '🤖' },
+    { value: t.home.statDimensionsValue || '3维', label: t.home.statDimensions, icon: '🤖' },
   ]
 
   const faqItems = [
@@ -913,14 +913,14 @@ export default function Home() {
       <footer className="bg-white border-t mt-12 py-8">
         <div className="max-w-1200 mx-auto px-4">
 
-          {/* GEO 矩阵四站互链 */}
+          {/* 生态矩阵五站互链 */}
           <div className="mb-8 pb-8" style={{ borderBottom: '1px solid var(--color-border)' }}>
             <div className="flex items-center gap-2 mb-4">
               <div className="flex-1 h-px" style={{ background: 'var(--color-border)' }} />
               <p className="text-xs font-medium px-3" style={{ color: 'var(--color-text-tertiary)' }}>{t.home.footerMatrix}</p>
               <div className="flex-1 h-px" style={{ background: 'var(--color-border)' }} />
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
               {/* 当前站 */}
               <div
                 className="p-4 bg-white"
@@ -942,6 +942,8 @@ export default function Home() {
               {[
                 { href: 'https://www.dianping.com', icon: '⭐', domain: 'dianping.com', layer: t.home.footerLayer2 || 'DianPing Reviews', desc: t.home.footerLayer2Desc || 'Real user reviews & ratings' },
                 { href: 'https://www.meituan.com', icon: '🛍️', domain: 'meituan.com', layer: t.home.footerLayer3 || 'Meituan Deals', desc: t.home.footerLayer3Desc || 'Group deals & vouchers' },
+                { href: 'https://index.meituan.com', icon: '📊', domain: 'index.meituan.com', layer: t.home.footerLayer4 || 'Meituan Big Data', desc: t.home.footerLayer4Desc || 'Industry Index / Reports / Insights' },
+                { href: 'https://guide.meituan.com', icon: '🧭', domain: 'guide.meituan.com', layer: t.home.footerLayer5 || 'Meituan Guide', desc: t.home.footerLayer5Desc || 'Scene Picks / KOL Tips / Shopping' },
               ].map(site => (
                 <a
                   key={site.href}
