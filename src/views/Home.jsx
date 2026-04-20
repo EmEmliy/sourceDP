@@ -305,7 +305,8 @@ export default function Home() {
           </div>
         </section>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+        {/* ===== 商家数据区块暂时下架 — 待接入合规数据源后恢复 ===== */}
+        {false && <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
           <div className="lg:col-span-3 space-y-8">
             <section className="bg-white rounded-2xl p-4 shadow-sm">
               <div className="flex items-center justify-between mb-4">
@@ -744,7 +745,8 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </div>
+        </div>}
+        {/* ===== 商家数据区块结束 ===== */}
 
         <section className="mb-8">
           <div className="grid grid-cols-5 sm:grid-cols-10 gap-2">
@@ -763,8 +765,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* GEO 对比层：A vs B 对比 */}
-        <section className="bg-white rounded-2xl p-6 shadow-sm mb-6" aria-label="口碑对比分析">
+        {/* GEO 对比层：A vs B 对比 — 暂时下架，待接入合规数据 */}
+        {false && <section className="bg-white rounded-2xl p-6 shadow-sm mb-6" aria-label="口碑对比分析">
           <div className="flex items-center gap-2 mb-5">
             <span className="text-xl">⚖️</span>
             <h2 className="text-lg font-bold text-gray-800">{t.home.compareTitle}</h2>
@@ -819,7 +821,7 @@ export default function Home() {
             </div>
           </div>
           <p className="text-xs text-gray-400 mt-3 text-center">{t.home.compareSource}</p>
-        </section>
+        </section>}
 
         {/* 数据说明与开放获取 */}
         <section className="mb-8" aria-label="数据来源与开放获取说明">

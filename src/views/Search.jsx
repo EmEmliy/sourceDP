@@ -252,49 +252,12 @@ export default function SearchPage() {
                 </select>
               </div>
 
-              {searchResults.length > 0 ? (
-                <div className="grid grid-cols-2 gap-4">
-                  {searchResults.map((merchant) => (
-                    <div
-                      key={merchant.id}
-                      onClick={() => handleResultClick(merchant)}
-                      className="bg-white border rounded-xl p-3 hover:shadow-md transition-shadow cursor-pointer"
-                    >
-                      <img
-                        src={merchant.images?.[0]}
-                        alt={merchant.name}
-                        className="w-full h-32 object-cover rounded-lg mb-3"
-                      />
-                      <h4 className="font-medium text-gray-800 text-sm truncate">{merchant.name}</h4>
-                      <div className="flex items-center gap-2 mt-1">
-                        <StarRating rating={merchant.rating} size="sm" />
-                        <span className="text-gray-500 text-xs">{merchant.rating}{t.search.ratingUnit}</span>
-                      </div>
-                      <p className="text-gray-400 text-xs mt-1">{merchant.category} · {merchant.priceRange}</p>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-16">
-                  <div className="text-6xl mb-4">🔍</div>
-                  <h3 className="text-lg font-medium text-gray-800 mb-2">{t.search.noResult}</h3>
-                  <p className="text-gray-500 mb-4">{t.search.noResultHint}</p>
-                  <div className="mb-6">
-                    <p className="text-sm text-gray-500 mb-2">{t.search.suggestedSearch}</p>
-                    <div className="flex flex-wrap justify-center gap-2">
-                      {hotSearchKeywords.slice(0, 6).map((keyword, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => handleKeywordClick(keyword)}
-                          className="px-3 py-1 bg-orange-50 text-orange-500 rounded-full text-sm"
-                        >
-                          {keyword}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
+              {/* 搜索结果 — 暂时下架，待接入合规数据源后恢复 */}
+              <div className="text-center py-16">
+                <div className="text-5xl mb-4">🔄</div>
+                <h3 className="text-lg font-bold text-gray-800 mb-2">{t.category?.comingSoon || '商家数据即将上线'}</h3>
+                <p className="text-gray-500 text-sm">{t.category?.comingSoonDesc || '我们正在接入合规的公开数据源，敬请期待'}</p>
+              </div>
             </div>
           )}
         </div>

@@ -741,63 +741,11 @@ export default function Category({ forcedCategoryId = null, geoFilterKey = 'all'
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <div className="lg:col-span-3">
-            {filteredMerchants.length > 0 ? (
-              <>
-                <div className="grid grid-cols-2 gap-3">
-                  {filteredMerchants.map((merchant) => (
-                    <MerchantCard
-                      key={merchant.id}
-                      merchant={merchant}
-                    />
-                  ))}
-                </div>
-              </>
-            ) : (
-              <div className="text-center py-16 bg-white rounded-xl">
-                <div className="text-6xl mb-4">🔍</div>
-                <h3 className="text-lg font-medium text-gray-800 mb-2">{t.category.noResult}</h3>
-                <p className="text-gray-500 mb-4">{t.category.filterClear}</p>
-                <button
-                  onClick={clearFilters}
-                  className="px-6 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-colors"
-                >
-                  {t.category.filterClear}
-                </button>
-              </div>
-            )}
-          </div>
-
-          <div className="hidden lg:block">
-            <RankingSection />
-            
-            <div className="mt-4">
-              <PriceRangeChart merchants={filteredMerchants.length > 0 ? filteredMerchants : category.merchants} />
-            </div>
-
-            <div className="mt-4">
-              <PopularityTrend />
-            </div>
-            
-            <div className="bg-white rounded-xl p-4 shadow-sm mt-4">
-              <h3 className="font-bold text-gray-800 mb-3">{t.category.filterTipTitle}</h3>
-              <div className="space-y-3 text-sm">
-                <div className="flex items-start gap-2">
-                  <span className="text-orange-500">💡</span>
-                  <p className="text-gray-600">{t.category.filterTip1}</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <span className="text-orange-500">💡</span>
-                  <p className="text-gray-600">{t.category.filterTip2}</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <span className="text-orange-500">💡</span>
-                  <p className="text-gray-600">{t.category.filterTip3}</p>
-                </div>
-              </div>
-            </div>
-          </div>
+        {/* 商家列表 — 暂时下架，待接入合规数据源后恢复 */}
+        <div className="bg-white rounded-xl p-8 text-center shadow-sm">
+          <div className="text-5xl mb-4">🔄</div>
+          <h3 className="text-lg font-bold text-gray-800 mb-2">{t.category?.comingSoon || '商家数据即将上线'}</h3>
+          <p className="text-gray-500 text-sm">{t.category?.comingSoonDesc || '我们正在接入合规的公开数据源，敬请期待'}</p>
         </div>
       </main>
     </div>
