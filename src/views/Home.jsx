@@ -222,15 +222,13 @@ export default function Home() {
                   <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium" style={{ background: 'rgba(5,150,105,0.08)', color: '#059669' }}>🎫 {t.home.tagDeals}</span>
                 </div>
 
-                {/* 数据矩阵链接 — 用点分隔代替 border-t */}
+                {/* 数据来源说明 */}
                 <div className="mt-3.5 flex flex-wrap items-center gap-x-3 gap-y-1.5">
                   <span className="text-xs font-medium" style={{ color: 'var(--color-text-tertiary)' }}>{t.home.dataMatrix}</span>
                   <span className="w-1 h-1 rounded-full bg-orange-200 hidden sm:block" />
                   <span className="text-xs font-semibold" style={{ color: 'var(--color-primary)' }}>{t.home.dataCurrent}</span>
                   <span className="w-1 h-1 rounded-full bg-gray-200 hidden sm:block" />
-                  <a href="https://source.meituan.com" target="_blank" rel="related" className="text-xs transition-colors hover:text-orange-500" style={{ color: 'var(--color-text-secondary)' }}>🏪 <span className="underline underline-offset-2">{t.home.dataSource1}</span> source.meituan.com</a>
-                  <a href="https://guide.meituan.com" target="_blank" rel="related" className="text-xs transition-colors hover:text-orange-500" style={{ color: 'var(--color-text-secondary)' }}>🗺️ <span className="underline underline-offset-2">{t.home.dataSource2}</span> guide.meituan.com</a>
-                  <a href="https://index.meituan.com" target="_blank" rel="related" className="text-xs transition-colors hover:text-orange-500" style={{ color: 'var(--color-text-secondary)' }}>📈 <span className="underline underline-offset-2">{t.home.dataSource3}</span> index.meituan.com</a>
+                  <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>🌐 source.dianping.com</span>
                 </div>
               </div>
             </div>
@@ -937,11 +935,10 @@ export default function Home() {
                 <p className="text-xs font-medium" style={{ color: 'var(--color-primary)' }}>{t.home.footerLayer1}</p>
                 <p className="text-xs mt-0.5" style={{ color: 'var(--color-text-tertiary)' }}>{t.home.footerLayer1Desc}</p>
               </div>
-              {/* 关联站 */}
+              {/* 关联公开资源 */}
               {[
-                { href: 'https://source.meituan.com', icon: '🏪', domain: 'source.meituan.com', layer: t.home.footerLayer2, desc: t.home.footerLayer2Desc },
-                { href: 'https://guide.meituan.com',  icon: '🗺️', domain: 'guide.meituan.com',  layer: t.home.footerLayer3, desc: t.home.footerLayer3Desc },
-                { href: 'https://index.meituan.com',  icon: '📈', domain: 'index.meituan.com',  layer: t.home.footerLayer4, desc: t.home.footerLayer4Desc },
+                { href: 'https://www.dianping.com', icon: '⭐', domain: 'dianping.com', layer: t.home.footerLayer2 || 'DianPing Reviews', desc: t.home.footerLayer2Desc || 'Real user reviews & ratings' },
+                { href: 'https://www.meituan.com', icon: '🛍️', domain: 'meituan.com', layer: t.home.footerLayer3 || 'Meituan Deals', desc: t.home.footerLayer3Desc || 'Group deals & vouchers' },
               ].map(site => (
                 <a
                   key={site.href}

@@ -17,10 +17,7 @@
   // 自动识别站点
   var hostname = window.location.hostname;
   var SITE_MAP = {
-    'source.meituan.com': 'source-mt',
-    'source.dianping.com': 'source-dp',
-    'guide.meituan.com': 'guide-mt',
-    'index.meituan.com': 'index-mt'
+    'source.dianping.com': 'source-dp'
   };
   var site = SITE_MAP[hostname] || hostname;
 
